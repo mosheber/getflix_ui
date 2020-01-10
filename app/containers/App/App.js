@@ -13,7 +13,7 @@ import { Switch, Route } from 'react-router-dom';
 import HomePage from 'containers/HomePage/Loadable';
 import FeaturePage from 'containers/FeaturePage/Loadable';
 import LoginPage from 'containers/LoginPage/Loadable';
-
+import BrowsePage from 'containers/BrowsePage/Loadable'
 
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import Header from 'components/Header';
@@ -33,6 +33,7 @@ const App = () => (
       <Route exact path="/" component={HomePage} />
       {/* <Route path="/features" component={FeaturePage} /> */}
       <Route path="/login" component={LoginPage} />
+      <Route path="/browse" component={BrowsePage} />
       <Route path="" component={NotFoundPage} />
     </Switch>
     <Footer />
