@@ -13,7 +13,8 @@ import { Switch, Route } from 'react-router-dom';
 import HomePage from 'containers/HomePage/Loadable';
 import FeaturePage from 'containers/FeaturePage/Loadable';
 import LoginPage from 'containers/LoginPage/Loadable';
-import BrowsePage from 'containers/BrowsePage/Loadable'
+import BrowsePage from 'containers/BrowsePage/Loadable';
+import MovieDetailPage from 'containers/MovieDetailPage/Loadable';
 
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import Header from 'components/Header';
@@ -34,6 +35,7 @@ const App = () => (
       {/* <Route path="/features" component={FeaturePage} /> */}
       <Route path="/login" component={LoginPage} />
       <Route path="/browse" component={BrowsePage} />
+      <Route path="/movie" component={MovieDetailPage} />
       <Route path="" component={NotFoundPage} />
     </Switch>
     <Footer />
