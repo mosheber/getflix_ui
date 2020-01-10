@@ -6,7 +6,16 @@ function evalState(actions,action,state){
       return state;
     }
   }
-  
+
+const initialState={
+    user:{
+        id:1,
+        username:'moshe',
+        password:'password',
+        isAdmin:true
+    },
+} 
+ 
 export default function userReducer(state=initialState,action){
     const actions={
       'FETCHING_USER':()=>{

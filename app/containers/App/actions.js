@@ -64,12 +64,12 @@ export function repoLoadingError(error) {
 
 
 
-export function fetchUser(username){
+export function fetchUser(username,password){
   return (dispatch)=> {
     dispatch(getUser());
 
-    return Promise((resolve,reject)=>{
-        resolve("{username:'moshe'}");
+    return new Promise((resolve,reject)=>{
+        resolve('{"id":1,"username":"haim","password":"111","isAdmin":true}');
     })
       .then(res => {
         return JSON.parse(res);
