@@ -19,7 +19,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button'
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
-
+import ImageUploader from 'react-images-upload';
 
 const useStyles = {
   card: {
@@ -53,7 +53,32 @@ export default class MovieDetailPage extends React.Component {
   constructor(props) {
     super(props);
     // Don't call this.setState() here!
+    this.state = { 
+      movie:{
+        name:'none',
+        img:'none',
+        director:'none',
+        description:'none',
+        publishDate:'2000-01-01'
+      }
+    };
+    this.onDrop = this.onDrop.bind(this);
+  }
 
+  onDrop(picture) {
+    var toBase64 = file => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
+    return toBase64(picture[picture.length-1]).then( res => {
+      this.setState({
+        movie: {
+          img: res
+        }
+      });
+    })
   }
 
   componentDidMount(){
@@ -62,11 +87,23 @@ export default class MovieDetailPage extends React.Component {
 
   render() {
     const classes = useStyles;
-
+    //} />
     return (
       <Paper style={{display:'flex'}} elevation={3} >
           <div style={{display:'flex',flexDirection:'column'}}>
-             <img src={this.props.currentMovie.movie.img} />
+            {
+              this.state.movie.img == 'none' ? 
+              <img src={this.props.currentMovie.movie.img} style={{width:300,height:500}} />
+              : <img src={this.state.movie.img} style={{width:300,height:500}} />
+            }
+
+            <ImageUploader
+                withIcon={true}
+                buttonText='Choose images'
+                onChange={this.onDrop}
+                imgExtension={['.jpg', '.gif', '.png', '.gif']}
+                //maxFileSize={5242880}
+              />
           </div>
           <div style={{display:'flex',flexDirection:'column'}}>
           <Card style={{width:500}}>
@@ -105,6 +142,7 @@ export default class MovieDetailPage extends React.Component {
                 multiline
                 style={{width:500}}
               />
+
           
             </CardContent>
             <CardActions  className="animated bounce">
