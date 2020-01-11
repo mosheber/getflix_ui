@@ -10,7 +10,10 @@ function evalState(actions,action,state){
 const initialState={
   movie:{
     name:'none',
-    img:'none'
+    img:'none',
+    director:'none',
+    description:'none',
+    publishDate:'2000-01-01'
   },
 } 
 

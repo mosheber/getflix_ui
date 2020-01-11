@@ -17,24 +17,31 @@ import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button'
+import Paper from '@material-ui/core/Paper';
+import TextField from '@material-ui/core/TextField';
+
 
 const useStyles = {
   card: {
-    maxWidth: 345,
+    display: 'flex',
   },
-  media: {
-    height: 0,
-    paddingTop: '56.25%', // 16:9
+  details: {
+    display: 'flex',
+    flexDirection: 'column',
   },
-  expand: {
-    transform: 'rotate(0deg)',
-    marginLeft: 'auto',
+  content: {
+    flex: '1 0 auto',
   },
-  expandOpen: {
-    transform: 'rotate(180deg)',
+  cover: {
+    height: 200,
   },
-  avatar: {
-    backgroundColor: red[500],
+  controls: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  playIcon: {
+    height: 38,
+    width: 38,
   },
 };
 
@@ -46,7 +53,7 @@ export default class MovieDetailPage extends React.Component {
   constructor(props) {
     super(props);
     // Don't call this.setState() here!
-    
+
   }
 
   componentDidMount(){
@@ -57,51 +64,83 @@ export default class MovieDetailPage extends React.Component {
     const classes = useStyles;
 
     return (
-      <div>
-        <Helmet>
-          <title>Browse Page</title>
-          <meta
-            name="description"
-            content="Feature page of React.js Boilerplate application"
-          />
-        </Helmet>
-        <Card className={classes.card}>
-          <CardHeader
-            avatar={
-              <Avatar aria-label="Action" className={classes.avatar}>
-                A
-              </Avatar>
-            }
-            action={
-              <IconButton aria-label="settings">
-                <Button />
-              </IconButton>
-            }
-            title={this.props.currentMovie.movie.name}
-            subheader={this.props.currentMovie.movie.publishDate}
-          />
-          <img src={this.props.currentMovie.movie.img} />
-          <CardMedia
-            // className={classes.media}
-            image={this.props.currentMovie.movie.img}
-            title="Movie"
-          />
-    
-          <CardContent>
-            <Typography variant="body2" color="textSecondary" component="p">
-              This impressive paella is a perfect party dish and a fun meal to cook together with your
-              guests. Add 1 cup of frozen peas along with the mussels, if you like.
-            </Typography>
-          </CardContent>
-          <CardActions disableSpacing>
-            <IconButton aria-label="add to favorites">
-              <Button />
-            </IconButton>
-          </CardActions>
-        </Card>
-      </div>
+      <Paper style={{display:'flex'}} elevation={3} >
+          <div style={{display:'flex',flexDirection:'column'}}>
+             <img src={this.props.currentMovie.movie.img} />
+          </div>
+          <div style={{display:'flex',flexDirection:'column'}}>
+          <Card style={{width:500}}>
+            <CardContent>
+              
+              <TextField
+               className="animated fadeIn"
+                label="Movie name"
+                defaultValue={this.props.currentMovie.movie.name}
+              />
+
+              <div style={{padding:30}}></div>
+              <TextField
+               className="animated fadeIn"
+                label="Director"
+                defaultValue={this.props.currentMovie.movie.director}
+                helperText="The director of the movie"
+              />
+
+              <div style={{padding:10}}></div>
+              <TextField
+               className="animated fadeIn"
+                label="Publish Date"
+                type="date"
+                defaultValue={this.props.currentMovie.movie.publishDate}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+
+              <div style={{padding:10}}></div>
+              <TextField
+               className="animated fadeIn"
+                label="Description"
+                defaultValue={this.props.currentMovie.movie.description}
+                multiline
+                style={{width:500}}
+              />
+          
+            </CardContent>
+            <CardActions  className="animated bounce">
+              <Button size="large">Save</Button>
+            </CardActions>
+          </Card>
+          </div>
+      </Paper>
     );
   }
 }
+// this.state = {
+//   previewOpen: false,
+//   savedImg: "http://www.placekitten.com/400/400"
+// }
+// this.handleFileChange=this.handleFileChange.bind(this)
+// this.handleSave=this.handleSave.bind(this)
+// this.handleRequestHide=this.handleRequestHide.bind(this)
+// handleFileChange(dataURI) {
+//   this.setState({
+//     img: dataURI,
+//     savedImg: this.state.savedImg,
+//     previewOpen: true
+//   });
+// }
 
+// handleSave(dataURI) {
+//   this.setState({
+//     previewOpen: false,
+//     img: null,
+//     savedImg: dataURI
+//   });
+// }
 
+// handleRequestHide() {
+//   this.setState({
+//     previewOpen: false
+//   });
+// }
