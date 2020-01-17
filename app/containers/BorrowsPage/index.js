@@ -17,7 +17,7 @@ function mapStateToProps(state) {
   
   function mapDispatchToProps(dispatch) {
     return {
-      fetchBorrows: (id) => dispatch(fetchBorrows(id)),
+      fetchBorrows: (userId) => dispatch(fetchBorrows(userId)),
     }
   }
 

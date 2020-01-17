@@ -9,7 +9,16 @@ function evalState(actions,action,state){
 
 const initialState={
   borrows:[
-    {}
+    {
+      id:0,
+      userId:0,
+      userName: 'none',
+      movieId:9,
+      movieName: 'none',
+      startDate: '1970-01-01',
+      endDate: '1970-01-01',
+      isReturned: false
+    }
   ],
 } 
 

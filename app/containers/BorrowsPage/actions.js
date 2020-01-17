@@ -1,9 +1,27 @@
 const borrows = [
   {
-
+    id:1,
+    userId:2,
+    userName: 'shlomo',
+    movieId:2,
+    movieName: 'Avengers: Endgame',
+    startDate: '2019-01-01',
+    endDate: '2019-01-14',
+    isReturned: false
+  },
+  {
+    id:2,
+    userId:1,
+    userName: 'moshe',
+    movieId:3,
+    movieName: 'Lion King',
+    startDate: '2019-01-02',
+    endDate: '2019-01-09',
+    isReturned: true
   }
 ]
-export function fetchBorrows(id){
+
+export function fetchBorrows(userId){
   return (dispatch)=> {
     dispatch(getBorrows());
 

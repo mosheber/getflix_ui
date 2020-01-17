@@ -146,7 +146,7 @@ export default class MovieDetailPage extends React.Component {
           
             </CardContent>
             <CardActions  className="animated bounce">
-              <Button size="large">Save</Button>
+              <Button color='primary' size="large">Save</Button>
             </CardActions>
           </Card>
           </div>
