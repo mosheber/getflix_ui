@@ -85,7 +85,7 @@ export default class BorrowsPage extends React.Component {
                     <TableCell align="right">
                       {
                         row.isReturned ? <div></div> : 
-                        <Button onClick = {() => this.returnBook(row.id)} variant="contained" color="primary">Return</Button>
+                        <Button className="animated fadeIn" onClick = {() => this.returnBook(row.id)} variant="contained" color="primary">Return</Button>
                       }
                     </TableCell>
                   </TableRow>

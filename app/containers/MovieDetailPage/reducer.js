@@ -13,7 +13,9 @@ const initialState={
     img:'none',
     director:'none',
     description:'none',
-    publishDate:'2000-01-01'
+    categories: [],
+    publishDate:'2000-01-01',
+    comments:[]
   },
 } 
 

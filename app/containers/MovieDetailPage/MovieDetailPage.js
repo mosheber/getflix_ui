@@ -4,6 +4,7 @@
  * List all the features
  */
 import React from 'react';
+import Rating from '@material-ui/lab/Rating';
 import { Helmet } from 'react-helmet';
 import './style.scss';
 import Card from '@material-ui/core/Card';
@@ -20,6 +21,12 @@ import Button from '@material-ui/core/Button'
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import ImageUploader from 'react-images-upload';
+import Chip from '@material-ui/core/Chip';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import Divider from '@material-ui/core/Divider';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 
 const useStyles = {
   card: {
@@ -43,6 +50,12 @@ const useStyles = {
     height: 38,
     width: 38,
   },
+  root: {
+    backgroundColor: "white",
+  },
+  inline: {
+    display: 'inline',
+  },
 };
 
 export default class MovieDetailPage extends React.Component {
@@ -63,6 +76,7 @@ export default class MovieDetailPage extends React.Component {
       }
     };
     this.onDrop = this.onDrop.bind(this);
+    this.onRemoveCategory = this.onRemoveCategory.bind(this)
   }
 
   onDrop(picture) {
@@ -83,6 +97,10 @@ export default class MovieDetailPage extends React.Component {
 
   componentDidMount(){
     this.props.fetchMovie(1);
+  }
+
+  onRemoveCategory(cat){
+    console.log(cat)
   }
 
   render() {
@@ -143,12 +161,76 @@ export default class MovieDetailPage extends React.Component {
                 style={{width:500}}
               />
 
-          
+              {
+                this.props.currentMovie.movie.categories.map(cat => 
+                    (
+                      <Chip label={cat} onDelete={() => this.onRemoveCategory(cat)} color="primary" />
+                    )
+                  )
+              }
+              
             </CardContent>
             <CardActions  className="animated bounce">
               <Button color='primary' size="large">Save</Button>
             </CardActions>
           </Card>
+          </div>
+          <div style={{display:'flex'}}>     
+              
+              <List className={classes.root}>
+                  <ListItem>
+                      <TextField
+                      className="animated fadeIn"
+                        label="Enter Comment"
+                        defaultValue="is nice :)"
+                        multiline  
+                      />
+                      <Rating
+                        name="simple-controlled"
+                        value={0}
+                        onChange={(event, newValue) => {
+                          console.log(newValue);
+                        }}
+                      />
+                    <Button color='primary'>Post</Button>
+                  </ListItem>
+                  {
+                    this.props.currentMovie.movie.comments.map(com => 
+                      (
+                        <div>
+                            <ListItem alignItems="flex-start">
+                              <ListItemAvatar>
+                                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                              </ListItemAvatar>
+                              <ListItemText
+                                primary={com.userName}
+                                secondary={
+                                  <React.Fragment>
+                                    <Typography
+                                      component="span"
+                                      variant="body2"
+                                      color="textPrimary"
+                                    >
+                                      {com.text}
+                                    </Typography>
+                                    <Rating
+                                      name="simple-controlled"
+                                      value={com.grade}
+                                      onChange={(event, newValue) => {
+                                        console.log(newValue);
+                                      }}
+                                      readOnly
+                                    />
+                                  </React.Fragment>
+                                }
+                              />
+                            </ListItem>
+                            <Divider variant="inset" component="li" />
+                        </div>                  
+                      )
+                      )
+                  }
+              </List>
           </div>
       </Paper>
     );

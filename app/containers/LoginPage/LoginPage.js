@@ -67,13 +67,13 @@ export default class LoginPage extends React.Component {
               Login: 
             </Typography>
             <form noValidate autoComplete="off">
-              <div className="animated slideInLeft">
+              <div className="animated fadeIn">
                 <Typography color="textSecondary" gutterBottom>
                   Username
                 </Typography>
                 <TextField onChange={(e)=>this.onChangeValue(e,'username')} variant="filled" id="standard-error" />
               </div>
-              <div className="animated slideInLeft">
+              <div className="animated fadeIn">
                 <Typography color="textSecondary" gutterBottom>
                   Password
                 </Typography>
@@ -82,7 +82,7 @@ export default class LoginPage extends React.Component {
             </form>
           </CardContent>
           <CardActions>
-            <Button onClick = {this.login} variant="contained" color="primary"  >Login</Button>
+            <Button className="animated bounce" onClick = {this.login} variant="contained" color="primary"  >Login</Button>
           </CardActions>
         </Card>
         
