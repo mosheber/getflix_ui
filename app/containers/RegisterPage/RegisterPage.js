@@ -27,6 +27,8 @@ import ListItem from '@material-ui/core/ListItem';
 import Divider from '@material-ui/core/Divider';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import Switch from '@material-ui/core/Switch';
+
 
 const useStyles = {
   card: {
@@ -81,6 +83,8 @@ export default class RegisterPage extends React.Component {
     };
     this.onDrop = this.onDrop.bind(this);
     this.onRemoveCategory = this.onRemoveCategory.bind(this)
+    this.register = this.register.bind(this);
+    this.onChangeValue=this.onChangeValue.bind(this);
   }
 
   onDrop(picture) {
@@ -93,7 +97,7 @@ export default class RegisterPage extends React.Component {
     return toBase64(picture[picture.length-1]).then( res => {
       this.setState({
         user: {
-          img: res
+          ['img']: res
         }
       });
     })
@@ -105,6 +109,34 @@ export default class RegisterPage extends React.Component {
 
   onRemoveCategory(cat){
     console.log(cat)
+  }
+
+  register(){
+    this.props.createUser(this.state.user)
+    .then(res => {
+      if(res.data){
+        if(res.data instanceof Error){
+          alert(res.data)
+        }else{
+          this.props.history.push('/browse')
+        }
+      }
+    });
+  }
+
+
+  onChangeValue(e,key) {
+    var user = this.state.user;
+    if(key=='isAdmin'){
+      user[key] = e.target.checked;
+    }else{
+      user[key] = e.target.value;
+    }
+    
+    this.setState({
+      user:user
+    });
+  
   }
 
   render() {
@@ -134,6 +166,7 @@ export default class RegisterPage extends React.Component {
               <TextField
                className="animated fadeIn"
                 label="Username"
+                onChange={(e)=>this.onChangeValue(e,'username')}
                 defaultValue={this.state.user.username}
               />
 
@@ -141,6 +174,7 @@ export default class RegisterPage extends React.Component {
               <TextField
                className="animated fadeIn"
                 label="First Name"
+                onChange={(e)=>this.onChangeValue(e,'firstname')}
                 defaultValue={this.state.user.firstname}
               />
 
@@ -149,6 +183,7 @@ export default class RegisterPage extends React.Component {
               <TextField
                className="animated fadeIn"
                 label="Last Name"
+                onChange={(e)=>this.onChangeValue(e,'lastname')}
                 defaultValue={this.state.user.lastname}
               />
 
@@ -157,6 +192,7 @@ export default class RegisterPage extends React.Component {
               <TextField
                className="animated fadeIn"
                 label="Password"
+                onChange={(e)=>this.onChangeValue(e,'password')}
                 defaultValue={this.state.user.password}
               />
 
@@ -165,6 +201,7 @@ export default class RegisterPage extends React.Component {
               <TextField
                className="animated fadeIn"
                 label="Repeat Password"
+                onChange={(e)=>this.onChangeValue(e,'passwordRepeated')}
                 defaultValue={this.state.user.passwordRepeated}
               />
 
@@ -174,14 +211,27 @@ export default class RegisterPage extends React.Component {
                className="animated fadeIn"
                 label="Birth Date"
                 type="date"
+                onChange={(e)=>this.onChangeValue(e,'birthDate')}
                 defaultValue={this.state.user.birthDate}
                 InputLabelProps={{
                   shrink: true,
                 }}
-              />              
+              />          
+              <div>
+                <Typography color="textSecondary" gutterBottom>
+                  Is Admin?
+                </Typography>
+                <Switch
+                checked={this.state.user.isAdmin}
+                onChange={(e)=>this.onChangeValue(e,'isAdmin')}
+                value="isAdmin"
+                inputProps={{ 'aria-label': 'secondary checkbox' }}
+              /> 
+              </div>
+                  
             </CardContent>
             <CardActions  className="animated bounce">
-              <Button color='primary' size="large">Register</Button>
+              <Button onClick={this.register} color='primary' size="large">Register</Button>
             </CardActions>
           </Card>
           </div>

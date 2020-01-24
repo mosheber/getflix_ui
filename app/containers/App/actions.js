@@ -120,8 +120,8 @@ export function createUser(user){
       .then(res => {
         return JSON.parse(res);
       })
-    .then(json=>dispatch(getMovieSuccess(json)))
-    .catch(err=>dispatch(getMovieError(err)))
+    .then(json=>dispatch(createUserSuccess(json)))
+    .catch(err=>dispatch(createUserError(err)))
   }
 }
 
