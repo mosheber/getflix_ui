@@ -19,7 +19,7 @@ import BorrowsPage from 'containers/BorrowsPage/Loadable';
 import RegisterPage from 'containers/RegisterPage/Loadable';
 
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
-import Header from 'components/Header';
+import Header from 'components/Header/Loadable';
 import Footer from 'components/Footer';
 import './style.scss';
 
@@ -40,6 +40,7 @@ const App = () => (
       <Route path="/movie" component={MovieDetailPage} />
       <Route path="/borrows" component={BorrowsPage} />
       <Route path="/register" component={RegisterPage} />
+      <Route path="/header" component={Header} />
       <Route path="" component={LoginPage} />
     </Switch>
     <Footer />

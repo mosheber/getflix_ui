@@ -18,7 +18,17 @@ const classes = {
   },
 };
 
-class Header extends React.Component { // eslint-disable-line react/prefer-stateless-function
+export default class Header extends React.Component { // eslint-disable-line react/prefer-stateless-function
+  constructor(props) {
+    super(props);
+    // Don't call this.setState() here!
+//    this.goTo=this.goTo.bind(this);  
+  }
+
+  // goTo(path){
+  //   console.log('goto');
+  //   this.props.history.push(path)
+  // }
   render() {
     return (
         <div style={classes.root}>
@@ -32,8 +42,11 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
                 <img src={Banner} alt="getflix" width="40%"/>
               </a>
               <Typography variant="h6" style={classes.title}>
+                Hello {this.props.user.user.username}!
+              </Typography>
+              <Typography variant="h6" style={classes.title}>
                 <Link className="router-link no-link" to="/browse">
-                  Browse Catalog
+                  Browse Catalog            
                 </Link>
               </Typography>
               <Typography variant="h6" style={classes.title}>
@@ -58,4 +71,3 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
   }
 }
 
-export default Header;
