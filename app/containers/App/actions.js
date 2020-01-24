@@ -72,6 +72,7 @@ export function fetchUser(username,password){
         resolve('{"id":1,"username":"haim","password":"111","isAdmin":true}');
     })
       .then(res => {
+        // throw Error('Invalid username or password');
         return JSON.parse(res);
       })
     .then(json=>dispatch(getUserSuccess(json)))
@@ -96,6 +97,7 @@ function getUserSuccess(data){
 
 function getUserError(data){
   return {
-    type:'FETCHING_USER_ERROR'
+    type:'FETCHING_USER_ERROR',
+    data
   }
 }

@@ -14,6 +14,7 @@ const initialState={
         password:'password',
         isAdmin:true
     },
+    errorMessage:''
 } 
  
 export default function userReducer(state=initialState,action){
@@ -35,7 +36,7 @@ export default function userReducer(state=initialState,action){
         return {
           ...state,
           isFetching:false,
-          error:true
+          errorMessage:action.data.message
         }
       }
     }

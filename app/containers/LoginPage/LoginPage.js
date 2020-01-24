@@ -25,17 +25,44 @@ export default class LoginPage extends React.Component {
     this.state = { 
       username: '',
       password: '',
+      passwordErrorMessage:'',
+      passwordError: true,
      };
     this.login = this.login.bind(this);
     this.onChangeValue = this.onChangeValue.bind(this);
+    this.validatePassword=this.validatePassword.bind(this);
   }
 
   shouldComponentUpdate() {
     return false;
   }
 
+
   login() {
-    this.props.getUser(this.state.username,this.state.password);
+    console.log('attempt login')
+    this.props.getUser(this.state.username,this.state.password)
+    .then(res => {
+      if(res.data){
+        if(res.data instanceof Error){
+          alert(res.data)
+        }else{
+          this.props.history.push('/browse')
+        }
+      }
+    })
+    // if(!this.validatePassword(this.state.password)){
+    //   console.log('pass invalid')
+    //   this.setState({
+    //     passwordError:true,
+    //     passwordErrorMessage: 'Invalid Password. It needs to have 8 characters, One Uppercase, One lowercase.'
+    //   });
+    // } else {
+      
+    // }
+  }
+
+  validatePassword(text){
+    return /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(text);
   }
 
   onChangeValue(e,key) {
@@ -46,7 +73,8 @@ export default class LoginPage extends React.Component {
     }
     if(key == 'password'){
       this.setState({
-        password:e.target.value
+        password:e.target.value,
+        passwordError: !this.validatePassword(e.target.value)
       });
     }
   }
@@ -77,8 +105,18 @@ export default class LoginPage extends React.Component {
                 <Typography color="textSecondary" gutterBottom>
                   Password
                 </Typography>
-                <TextField onChange={(e)=>this.onChangeValue(e,'password')} variant="filled" id="standard-error" />
+                <TextField
+                onChange={(e)=>this.onChangeValue(e,'password')} variant="filled" id="standard-error" />
               </div>
+              {
+                this.props.user.errorMessage=='' ? null : 
+                <div>    
+                <Typography color="error" gutterBottom>
+                    {this.props.user.errorMessage}
+                </Typography>
+              </div>
+              }
+              
             </form>
           </CardContent>
           <CardActions>

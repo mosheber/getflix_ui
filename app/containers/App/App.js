@@ -32,13 +32,13 @@ const App = () => (
     </Helmet>
     <Header />
     <Switch>
-      <Route exact path="/" component={HomePage} />
+      {/* <Route exact path="/" component={HomePage} /> */}
       {/* <Route path="/features" component={FeaturePage} /> */}
-      <Route path="/login" component={LoginPage} />
+      <Route exact path="/login" component={LoginPage} />
       <Route path="/browse" component={BrowsePage} />
       <Route path="/movie" component={MovieDetailPage} />
       <Route path="/borrows" component={BorrowsPage} />
-      <Route path="" component={NotFoundPage} />
+      <Route path="" component={LoginPage} />
     </Switch>
     <Footer />
   </div>
