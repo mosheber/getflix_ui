@@ -101,3 +101,48 @@ function getUserError(data){
     data
   }
 }
+
+const def_user = {
+  id:1,
+  username:"haim",
+  password:"111",
+  isAdmin:true
+}
+
+
+export function createUser(user){
+  return (dispatch)=> {
+    dispatch(createUserStart());
+
+    return new Promise((resolve,reject)=>{
+        resolve(JSON.stringify(user));
+    })
+      .then(res => {
+        return JSON.parse(res);
+      })
+    .then(json=>dispatch(getMovieSuccess(json)))
+    .catch(err=>dispatch(getMovieError(err)))
+  }
+}
+
+
+function createUserStart(){
+  return {
+    type:'CREATING_USER'
+  }
+}
+
+
+function createUserSuccess(data){
+  return {
+    type:'CREATING_USER_SUCCESS',
+    data
+  }
+}
+
+function createUserError(data){
+  return {
+    type:'CREATING_USER_ERROR',
+    data
+  }
+}

@@ -14,7 +14,8 @@ const initialState={
         password:'password',
         isAdmin:true
     },
-    errorMessage:''
+    errorMessage:'',
+    registerErrorMessage:''
 } 
  
 export default function userReducer(state=initialState,action){
@@ -37,6 +38,26 @@ export default function userReducer(state=initialState,action){
           ...state,
           isFetching:false,
           errorMessage:action.data.message
+        }
+      },
+      'CREATING_USER':()=>{
+        return {
+          ...state,
+          isCreating:true,
+        }
+      },
+      'CREATING_USER_SUCCESS':()=>{
+        return {
+          ...state,
+          isCreating:false,
+          user:action.data
+        }
+      },
+      'CREATING_USER_ERROR':()=>{
+        return {
+          ...state,
+          isCreating:false,
+          registerErrorMessage:action.data.message
         }
       }
     }

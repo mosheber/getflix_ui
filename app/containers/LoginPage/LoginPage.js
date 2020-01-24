@@ -31,6 +31,7 @@ export default class LoginPage extends React.Component {
     this.login = this.login.bind(this);
     this.onChangeValue = this.onChangeValue.bind(this);
     this.validatePassword=this.validatePassword.bind(this);
+    this.register=this.register.bind(this);
   }
 
   shouldComponentUpdate() {
@@ -79,6 +80,10 @@ export default class LoginPage extends React.Component {
     }
   }
 
+  register(){
+    this.props.history.push('/register');
+  }
+
   render() {
     return (
       <div>
@@ -121,6 +126,7 @@ export default class LoginPage extends React.Component {
           </CardContent>
           <CardActions>
             <Button className="animated bounce" onClick = {this.login} variant="contained" color="primary"  >Login</Button>
+            <Button className="animated bounce" onClick = {this.register} variant="contained" color="primary"  >Register</Button>
           </CardActions>
         </Card>
         
