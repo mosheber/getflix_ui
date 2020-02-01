@@ -10,10 +10,19 @@ import { makeStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
+import Typography from '@material-ui/core/Typography';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import Fab from '@material-ui/core/Fab';
+import Toolbar from '@material-ui/core/Toolbar';
+import AppBar from '@material-ui/core/AppBar';
+import Paper from '@material-ui/core/Paper';
+import InputBase from '@material-ui/core/InputBase';
+import Divider from '@material-ui/core/Divider';
+import SearchIcon from '@material-ui/icons/Search';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 
 const useStyles = {
   root: {
@@ -40,12 +49,29 @@ export default class BrowsePage extends React.Component {
   constructor(props) {
     super(props);
     // Don't call this.setState() here!
-    
+    this.state = {
+      search:{
+        searchText : '',
+        searchCategory: 'all'
+      }
+    }
   }
 
   componentDidMount(){
-    this.props.fetchMovies('','');
+    this.props.fetchMovies(this.state.search.searchText,this.state.search.searchCategory);
   }
+
+
+  onChangeValue(e,key) {
+    var obj = this.state.search;
+    obj[key] = e.target.value;
+    
+    this.setState({
+      search:obj
+    });
+    this.props.fetchMovies(obj.searchText,obj.searchCategory);
+  }
+
 
   render() {
     const classes = useStyles;
@@ -60,6 +86,33 @@ export default class BrowsePage extends React.Component {
           />
         </Helmet>
         <div className={classes.root}>
+        <AppBar position="static" color="white">
+            <Toolbar>
+            
+              <InputBase
+                placeholder="Search Movies..."
+                inputProps={{ 'aria-label': 'search movies' }}
+                defaultValue={this.state.search.searchText}
+                onChange={(e)=>this.onChangeValue(e,'searchText')}
+              />
+              <IconButton type="submit" aria-label="search">
+                <SearchIcon />
+              </IconButton>
+            
+            <Select
+              value={this.state.search.searchCategory}
+              onChange={(e)=>this.onChangeValue(e,'searchCategory')}
+            >
+              <MenuItem value={'all'}>All</MenuItem>
+              <MenuItem value={'comedy'}>Comedy</MenuItem>
+              <MenuItem value={'drama'}>Drama</MenuItem>
+              <MenuItem value={'action'}>Action</MenuItem>
+              <MenuItem value={'thriller'}>Thriller</MenuItem>
+              <MenuItem value={'family'}>Family</MenuItem>
+            </Select>
+            
+            </Toolbar>
+          </AppBar>
           <GridList cellHeight={360} className={classes.gridList} cols={5}>
             {this.props.movie.movies == undefined ? null : this.props.movie.movies.map(tile => (
               <GridListTile className="animated fadeIn" key={tile.img}>
