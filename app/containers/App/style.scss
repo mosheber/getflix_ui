@@ -6,3 +6,12 @@
   padding: 0 16px;
   flex-direction: column;
 }
+
+div {
+  cursor:text;
+}
+.no-link {
+  color:inherit;
+  text-decoration:none;
+  pointer-events:none;
+}

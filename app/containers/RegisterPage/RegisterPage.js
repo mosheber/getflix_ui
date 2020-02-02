@@ -95,10 +95,10 @@ export default class RegisterPage extends React.Component {
         reader.onerror = error => reject(error);
     });
     return toBase64(picture[picture.length-1]).then( res => {
+      var user = this.state.user;
+      user.img = res;
       this.setState({
-        user: {
-          ['img']: res
-        }
+        user: user
       });
     })
   }

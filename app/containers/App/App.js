@@ -37,7 +37,7 @@ const App = () => (
       {/* <Route path="/features" component={FeaturePage} /> */}
       <Route exact path="/login" component={LoginPage} />
       <Route path="/browse" component={BrowsePage} />
-      <Route path="/movie" component={MovieDetailPage} />
+      <Route path="/movie/:id" component={MovieDetailPage} />
       <Route path="/borrows" component={BorrowsPage} />
       <Route path="/register" component={RegisterPage} />
       <Route path="/header" component={Header} />

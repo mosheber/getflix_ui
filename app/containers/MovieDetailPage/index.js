@@ -12,7 +12,8 @@ import MovieDetailPage from './MovieDetailPage';
 
 function mapStateToProps(state) {
     return {
-      currentMovie: state.currentMovie
+      currentMovie: state.currentMovie,
+      user:state.user
     };
   }
   

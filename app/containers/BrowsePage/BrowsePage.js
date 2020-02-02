@@ -52,9 +52,10 @@ export default class BrowsePage extends React.Component {
     this.state = {
       search:{
         searchText : '',
-        searchCategory: 'all'
+        searchCategory: 'All'
       }
     }
+    this.goToMovie = this.goToMovie.bind(this);
   }
 
   componentDidMount(){
@@ -72,6 +73,9 @@ export default class BrowsePage extends React.Component {
     this.props.fetchMovies(obj.searchText,obj.searchCategory);
   }
 
+  goToMovie(id){
+    this.props.history.push('/movie/'+id.toString());
+  }
 
   render() {
     const classes = useStyles;
@@ -103,12 +107,13 @@ export default class BrowsePage extends React.Component {
               value={this.state.search.searchCategory}
               onChange={(e)=>this.onChangeValue(e,'searchCategory')}
             >
-              <MenuItem value={'all'}>All</MenuItem>
-              <MenuItem value={'comedy'}>Comedy</MenuItem>
-              <MenuItem value={'drama'}>Drama</MenuItem>
-              <MenuItem value={'action'}>Action</MenuItem>
-              <MenuItem value={'thriller'}>Thriller</MenuItem>
-              <MenuItem value={'family'}>Family</MenuItem>
+              <MenuItem value={'All'}>All</MenuItem>
+              <MenuItem value={'Comedy'}>Comedy</MenuItem>
+              <MenuItem value={'Drama'}>Drama</MenuItem>
+              <MenuItem value={'Action'}>Action</MenuItem>
+              <MenuItem value={'Thriller'}>Thriller</MenuItem>
+              <MenuItem value={'Family'}>Family</MenuItem>
+              <MenuItem value={'Science-Fiction'}>Science-Fiction</MenuItem>
             </Select>
             
             </Toolbar>
@@ -116,7 +121,7 @@ export default class BrowsePage extends React.Component {
           <GridList cellHeight={360} className={classes.gridList} cols={5}>
             {this.props.movie.movies == undefined ? null : this.props.movie.movies.map(tile => (
               <GridListTile className="animated fadeIn" key={tile.img}>
-                <img src={tile.img} alt={tile.name} />
+                <img onClick={()=>this.goToMovie(tile.id)} src={tile.img} alt={tile.name} />
                 <GridListTileBar
                   className="animated bounce"
                   title={tile.name}

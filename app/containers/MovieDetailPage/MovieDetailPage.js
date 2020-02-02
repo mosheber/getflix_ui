@@ -27,6 +27,9 @@ import ListItem from '@material-ui/core/ListItem';
 import Divider from '@material-ui/core/Divider';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+
 
 const useStyles = {
   card: {
@@ -73,10 +76,20 @@ export default class MovieDetailPage extends React.Component {
         director:'none',
         description:'none',
         publishDate:'2000-01-01'
+      },
+      mainValues:{
+        addCategory:'All',
+        comment:'',
+        rating:3
       }
+      //editable: false
     };
     this.onDrop = this.onDrop.bind(this);
     this.onRemoveCategory = this.onRemoveCategory.bind(this)
+    this.onAddCategory = this.onAddCategory.bind(this);
+    this.onChangeMainValue=this.onChangeMainValue.bind(this);
+    this.onAddComment = this.onAddComment.bind(this);
+    this.onChangeValue = this.onChangeValue.bind(this);
   }
 
   onDrop(picture) {
@@ -87,20 +100,96 @@ export default class MovieDetailPage extends React.Component {
         reader.onerror = error => reject(error);
     });
     return toBase64(picture[picture.length-1]).then( res => {
+      var movie = this.state.movie;
+      movie.img = res;
       this.setState({
-        movie: {
-          img: res
-        }
+        movie: movie
       });
     })
   }
 
   componentDidMount(){
-    this.props.fetchMovie(1);
+    let pathname = this.props.history.location.pathname;
+    let movieId = pathname.split('/').pop() ;
+
+    if(movieId=='0'){
+      console.log('create movie');
+    }else{
+      // this.setState({
+      //   editable:true
+      // });
+      console.log('edit movie');
+    }
+    
+    this.props.fetchMovie(movieId).then(res=>{
+      if(res.type.includes('SUCCESS')){
+        this.setState({
+          movie:res.data
+        })
+      }else{
+        console.log('fetch failed');
+      }
+    })
   }
 
   onRemoveCategory(cat){
-    console.log(cat)
+    let movie = this.state.movie
+    let categories = movie.categories;
+    let cat_removed = categories.splice(categories.indexOf(cat), 1);
+    movie.categories = categories;
+    this.setState({
+      movie:movie
+    })
+  }
+
+
+  onChangeValue(e,key){
+    let value = e.target.value;
+    var movie = this.state.movie;
+    movie[key] = value;
+    this.setState({
+      movie:movie
+    });
+  }
+
+  onChangeMainValue(e,key){
+    let value = e.target.value;
+    var mainValues = this.state.mainValues;
+    mainValues[key] = value;
+    this.setState({
+      mainValues:mainValues
+    });
+  }
+
+  onAddCategory(){
+    let category = this.state.mainValues.addCategory;
+    if(this.state.movie.categories.includes(category)){
+      alert('Category aleady in movie');
+    }else{
+      let movie = this.state.movie
+      movie.categories.push(category);
+      this.setState({
+        movie:movie
+      })
+    }
+  }
+
+  onAddComment(){
+    let movie = this.state.movie
+    let all_user = movie.comments.map(x => x.id)
+
+    if(all_user.includes(this.props.user.user.id) && false){ //REMOVE false WHEN PRODDDD
+      alert('You already gave your comment.');
+    }else{
+      movie.comments.push({
+        userName: this.props.user.user.username,
+        text: this.state.mainValues.comment,
+        grade: this.state.mainValues.rating
+      });
+      this.setState({
+        movie:movie
+      })
+    }
   }
 
   render() {
@@ -131,6 +220,7 @@ export default class MovieDetailPage extends React.Component {
                className="animated fadeIn"
                 label="Movie name"
                 defaultValue={this.props.currentMovie.movie.name}
+                onChange={(e)=>this.onChangeValue(e,'name')}
               />
 
               <div style={{padding:30}}></div>
@@ -139,6 +229,7 @@ export default class MovieDetailPage extends React.Component {
                 label="Director"
                 defaultValue={this.props.currentMovie.movie.director}
                 helperText="The director of the movie"
+                onChange={(e)=>this.onChangeValue(e,'director')}
               />
 
               <div style={{padding:10}}></div>
@@ -147,6 +238,7 @@ export default class MovieDetailPage extends React.Component {
                 label="Publish Date"
                 type="date"
                 defaultValue={this.props.currentMovie.movie.publishDate}
+                onChange={(e)=>this.onChangeValue(e,'publishDate')}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -157,10 +249,26 @@ export default class MovieDetailPage extends React.Component {
                className="animated fadeIn"
                 label="Description"
                 defaultValue={this.props.currentMovie.movie.description}
+                onChange={(e)=>this.onChangeValue(e,'description')}
                 multiline
                 style={{width:500}}
               />
 
+            <Select
+              value={this.state.mainValues.addCategory}
+              onChange={(e)=>this.onChangeMainValue(e,'addCategory')}
+            >
+              <MenuItem value={'All'}>All</MenuItem>
+              <MenuItem value={'Comedy'}>Comedy</MenuItem>
+              <MenuItem value={'Drama'}>Drama</MenuItem>
+              <MenuItem value={'Action'}>Action</MenuItem>
+              <MenuItem value={'Thriller'}>Thriller</MenuItem>
+              <MenuItem value={'Family'}>Family</MenuItem>
+              <MenuItem value={'Science-Fiction'}>Science-Fiction</MenuItem>
+            </Select>
+            
+                <Button onClick={this.onAddCategory} color='primary' size="large">Add Category</Button>
+                <div style={{padding:10}}></div>
               {
                 this.props.currentMovie.movie.categories.map(cat => 
                     (
@@ -182,17 +290,15 @@ export default class MovieDetailPage extends React.Component {
                       <TextField
                       className="animated fadeIn"
                         label="Enter Comment"
-                        defaultValue="is nice :)"
-                        multiline  
+                        defaultValue={this.state.mainValues.comment}
+                        onChange={(e)=>this.onChangeMainValue(e,'comment')}
                       />
                       <Rating
                         name="simple-controlled"
-                        value={0}
-                        onChange={(event, newValue) => {
-                          console.log(newValue);
-                        }}
+                        value={this.state.mainValues.rating}
+                        onChange={(e)=>this.onChangeMainValue(e,'rating')}
                       />
-                    <Button color='primary'>Post</Button>
+                    <Button onClick={this.onAddComment} color='primary'>Post</Button>
                   </ListItem>
                   {
                     this.props.currentMovie.movie.comments.map(com => 

@@ -41,17 +41,18 @@ export default class Header extends React.Component { // eslint-disable-line rea
               <a href="https://twitter.com/flexdinesh">
                 <img src={Banner} alt="getflix" width="40%"/>
               </a>
+              
               <Typography variant="h6" style={classes.title}>
                 Hello {this.props.user.user.username}!
               </Typography>
               <Typography variant="h6" style={classes.title}>
-                <Link className="router-link no-link" to="/browse">
+                <Link className="router-link" to="/browse">
                   Browse Catalog            
                 </Link>
               </Typography>
               <Typography variant="h6" style={classes.title}>
-                <Link className="router-link" to="/movie">
-                  Movie
+                <Link className="router-link" to="/movie/0">
+                  Add a Movie
                 </Link>
               </Typography>
               <Typography variant="h6" style={classes.title}>
