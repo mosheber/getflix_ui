@@ -35,13 +35,9 @@ export default class Header extends React.Component { // eslint-disable-line rea
           
           <AppBar position="static" color="white">
             <Toolbar>
-              {/* <IconButton edge="start" color="inherit" aria-label="menu">
-                <MenuIcon />
-              </IconButton> */}
-              <a href="https://twitter.com/flexdinesh">
-                <img src={Banner} alt="getflix" width="40%"/>
-              </a>
-              
+              <Link className="router-link" to="/browse">
+                  <img src={Banner} alt="getflix" width="40%"/>
+              </Link> 
               <Typography variant="h6" style={classes.title}>
                 Hello {this.props.user.user.username}!
               </Typography>
@@ -53,11 +49,6 @@ export default class Header extends React.Component { // eslint-disable-line rea
               <Typography variant="h6" style={classes.title}>
                 <Link className="router-link" to="/movie/0">
                   Add a Movie
-                </Link>
-              </Typography>
-              <Typography variant="h6" style={classes.title}>
-                <Link className="router-link" to="/login">
-                  Login
                 </Link>
               </Typography>
               <Typography variant="h6" style={classes.title}>

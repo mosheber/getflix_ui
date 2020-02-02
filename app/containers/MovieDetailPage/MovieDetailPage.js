@@ -90,6 +90,20 @@ export default class MovieDetailPage extends React.Component {
     this.onChangeMainValue=this.onChangeMainValue.bind(this);
     this.onAddComment = this.onAddComment.bind(this);
     this.onChangeValue = this.onChangeValue.bind(this);
+    this.save = this.save.bind(this);
+  }
+
+  save(){
+    var isCreate = !this.state.movie.hasOwnProperty('id');
+    
+    this.props.manageMovie(this.state.movie).then(res=>{
+      if(res.type.includes('ERROR')){
+        alert('Error: '+ res.toString())
+      }else{
+        let message = isCreate ? 'Creating' : 'Editing';
+        alert(message + ' the movie '+ this.state.movie.name + ' was successful!');
+      }
+    })
   }
 
   onDrop(picture) {
@@ -279,7 +293,7 @@ export default class MovieDetailPage extends React.Component {
               
             </CardContent>
             <CardActions  className="animated bounce">
-              <Button color='primary' size="large">Save</Button>
+              <Button onClick={this.save} color='primary' size="large">Save</Button>
             </CardActions>
           </Card>
           </div>

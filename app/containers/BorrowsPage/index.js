@@ -11,7 +11,8 @@ import BorrowsPage from './BorrowsPage';
 
 function mapStateToProps(state) {
     return {
-      borrows: state.borrows
+      borrows: state.borrows,
+      user: state.user
     };
   }
   

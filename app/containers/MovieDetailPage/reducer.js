@@ -40,6 +40,26 @@ export default function MovieReducer(state=initialState,action){
         isFetching:false,
         error:true
       }
+    },
+    'manageMovie_BEGIN':()=>{
+      return {
+        ...state,
+        isManaging:true,
+      }
+    },
+    'manageMovie_SUCCESS':()=>{
+      return {
+        ...state,
+        isManaging:false,
+        manageMovieResult:action.data
+      }
+    },
+    'manageMovie_ERROR':()=>{
+      return {
+        ...state,
+        isManaging:false,
+        manageMovieError:action.data
+      }
     }
   }
 

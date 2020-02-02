@@ -65,7 +65,11 @@ export default class BorrowsPage extends React.Component {
               <TableHead>
                 <TableRow>
                   <TableCell>Id</TableCell>
-                  <TableCell align="right">User Name</TableCell>
+                  {
+                    this.props.user.user.isAdmin ? 
+                    <TableCell align="right">User Name</TableCell> : 
+                    null
+                  }
                   <TableCell align="right">Movie Name</TableCell>
                   <TableCell align="right">Start Date</TableCell>
                   <TableCell align="right">End Date</TableCell>
@@ -80,7 +84,11 @@ export default class BorrowsPage extends React.Component {
                     <TableCell component="th" scope="row">
                       {row.id}
                     </TableCell>
-                    <TableCell align="right">{row.userName}</TableCell>
+                    {
+                      this.props.user.user.isAdmin ? 
+                      <TableCell align="right">{row.userName}</TableCell> :
+                      null
+                    }
                     <TableCell align="right">{row.movieName}</TableCell>
                     <TableCell align="right">{row.startDate}</TableCell>
                     <TableCell align="right">{row.endDate}</TableCell>

@@ -67,3 +67,41 @@ function getMovieError(data){
     type:'FETCHING_Movie_ERROR'
   }
 }
+
+
+export function manageMovie(movieObj){
+  return (dispatch)=> {
+    dispatch(manageMovieBegin());
+
+    return new Promise((resolve,reject)=>{
+        resolve(JSON.stringify(movieObj));
+    })
+      .then(res => {
+        return JSON.parse(res);
+      })
+    .then(json=>dispatch(manageMovieSuccess(json)))
+    .catch(err=>dispatch(manageMovieError(err)))
+  }
+}
+
+
+function manageMovieBegin(){
+  return {
+    type:'manageMovie_BEGIN'
+  }
+}
+
+
+function manageMovieSuccess(data){
+  return {
+    type:'manageMovie_SUCCESS',
+    data
+  }
+}
+
+function manageMovieError(data){
+  return {
+    type:'manageMovie_ERROR',
+    data
+  }
+}
