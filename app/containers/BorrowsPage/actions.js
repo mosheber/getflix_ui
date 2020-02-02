@@ -56,3 +56,80 @@ function getBorrowsError(data){
     type:'FETCHING_Borrows_ERROR'
   }
 }
+
+
+export function borrowMovie(userId,movieId){
+  return (dispatch)=> {
+    dispatch(borrowMovieBegin());
+
+    return new Promise((resolve,reject)=>{
+        resolve(JSON.stringify({result:'success'}));
+    })
+      .then(res => {
+        return JSON.parse(res);
+      })
+    .then(json=>dispatch(borrowMovieSuccess(json)))
+    .catch(err=>dispatch(borrowMovieError(err)))
+  }
+}
+
+
+function borrowMovieBegin(){
+  return {
+    type:'BORROW_MOVIE_BEGIN'
+  }
+}
+
+
+function borrowMovieSuccess(data){
+  return {
+    type:'BORROW_MOVIE_SUCCESS',
+    data
+  }
+}
+
+function borrowMovieError(data){
+  return {
+    type:'BORROW_MOVIE_ERROR',
+    data
+  }
+}
+
+
+
+export function returnMovie(borrowId){
+  return (dispatch)=> {
+    dispatch(returnMovieBegin());
+
+    return new Promise((resolve,reject)=>{
+        resolve(JSON.stringify({result:'success'}));
+    })
+      .then(res => {
+        return JSON.parse(res);
+      })
+    .then(json=>dispatch(returnMovieSuccess(json)))
+    .catch(err=>dispatch(returnMovieError(err)))
+  }
+}
+
+
+function returnMovieBegin(){
+  return {
+    type:'returnMovie_BEGIN'
+  }
+}
+
+
+function returnMovieSuccess(data){
+  return {
+    type:'returnMovie_SUCCESS',
+    data
+  }
+}
+
+function returnMovieError(data){
+  return {
+    type:'returnMovie_ERROR',
+    data
+  }
+}

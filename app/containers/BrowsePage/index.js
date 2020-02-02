@@ -5,6 +5,7 @@ import { createStructuredSelector } from 'reselect';
 import injectReducer from 'utils/injectReducer';
 //import injectSaga from 'utils/injectSaga';
 import { fetchMovies } from './actions';
+import { borrowMovie } from '../BorrowsPage/actions';
 import reducer from './reducer';
 // import saga from './saga';
 import BrowsePage from './BrowsePage';
@@ -12,13 +13,15 @@ import BrowsePage from './BrowsePage';
 
 function mapStateToProps(state) {
     return {
-      movie: state.movie
+      movie: state.movie,
+      user: state.user
     };
   }
   
   function mapDispatchToProps(dispatch) {
     return {
       fetchMovies: (category,searchString) => dispatch(fetchMovies(category,searchString)),
+      borrowMovie: (userId,movieId) => dispatch(borrowMovie(userId,movieId))
     }
   }
 

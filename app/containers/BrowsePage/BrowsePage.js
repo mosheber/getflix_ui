@@ -56,6 +56,7 @@ export default class BrowsePage extends React.Component {
       }
     }
     this.goToMovie = this.goToMovie.bind(this);
+    this.borrowMovie = this.borrowMovie.bind(this);
   }
 
   componentDidMount(){
@@ -75,6 +76,16 @@ export default class BrowsePage extends React.Component {
 
   goToMovie(id){
     this.props.history.push('/movie/'+id.toString());
+  }
+
+  borrowMovie(movieId,movieName){
+    this.props.borrowMovie(this.props.user.user.id,movieId).then(res=>{
+      if(res.type.includes('ERROR')){
+        alert(res)
+      }else{
+        alert('Borrowed '+movieName+'!')
+      }
+    })
   }
 
   render() {
@@ -129,7 +140,7 @@ export default class BrowsePage extends React.Component {
                   actionIcon={
                     // <IconButton aria-label={`info about ${tile.name}`} className={classes.icon}>
                     // </IconButton>
-                    <Fab color="secondary" variant="extended">
+                    <Fab onClick={()=>this.borrowMovie(tile.id,tile.name)} color="secondary" variant="extended">
                       {/* <NavigationIcon className={classes.extendedIcon} /> */}
                       Take
                     </Fab>

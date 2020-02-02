@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import injectReducer from 'utils/injectReducer';
 //import injectSaga from 'utils/injectSaga';
-import { fetchBorrows } from './actions';
+import { fetchBorrows,returnMovie } from './actions';
 import reducer from './reducer';
 // import saga from './saga';
 import BorrowsPage from './BorrowsPage';
@@ -18,6 +18,7 @@ function mapStateToProps(state) {
   function mapDispatchToProps(dispatch) {
     return {
       fetchBorrows: (userId) => dispatch(fetchBorrows(userId)),
+      returnMovie: (borrowId) => dispatch(returnMovie(borrowId)),
     }
   }
 

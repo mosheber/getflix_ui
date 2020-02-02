@@ -20,6 +20,8 @@ const initialState={
       isReturned: false
     }
   ],
+  isFetchingMovieBorrow: false,
+  isFetchingreturnMovie: false
 } 
 
 export default function BorrowsReducer(state=initialState,action){
@@ -42,6 +44,47 @@ export default function BorrowsReducer(state=initialState,action){
         ...state,
         isFetching:false,
         error:true
+      }
+    },
+    'BORROW_MOVIE_BEGIN':()=>{
+      return {
+        ...state,
+        isFetchingMovieBorrow:true,
+      }
+    },
+    'BORROW_MOVIE_SUCCESS':()=>{
+      return {
+        ...state,
+        isFetchingMovieBorrow:false,
+        movieBorrowResult:action.data
+      }
+    },
+    'BORROW_MOVIE_ERROR':()=>{
+      return {
+        ...state,
+        isFetchingMovieBorrow:false,
+        movieBorrowError:action.data
+      }
+    },
+    'returnMovie_BEGIN':()=>{
+      return {
+        ...state,
+        isFetchingreturnMovie:true,
+      }
+    },
+    'returnMovie_SUCCESS':()=>{
+      console.log(' in reducer returnMovie_SUCCESS')
+      return {
+        ...state,
+        isFetchingreturnMovie:false,
+        returnMovieResult:action.data
+      }
+    },
+    'returnMovie_ERROR':()=>{
+      return {
+        ...state,
+        isFetchingreturnMovie:false,
+        returnMovieError:action.data
       }
     }
   }

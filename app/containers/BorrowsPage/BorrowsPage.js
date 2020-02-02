@@ -45,13 +45,19 @@ export default class BorrowsPage extends React.Component {
     this.props.fetchBorrows(1);
   }
 
-  returnBook(id){
-    console.log(id)
+  returnBook(id,movieName){
+    this.props.returnMovie(id).then(res=>{
+      if(res.type.includes('ERROR')){
+        alert('could not return book');
+      }else{
+        alert(movieName+' returned!');
+      }
+    })
   }
 
   render() {
     const classes = useStyles;
-    //} />
+    
     return (
       <Paper style={{display:'flex'}} elevation={3} >
           <TableContainer component={Paper}>
@@ -85,7 +91,7 @@ export default class BorrowsPage extends React.Component {
                     <TableCell align="right">
                       {
                         row.isReturned ? <div></div> : 
-                        <Button className="animated fadeIn" onClick = {() => this.returnBook(row.id)} variant="contained" color="primary">Return</Button>
+                        <Button className="animated fadeIn" onClick = {() => this.returnBook(row.id,row.movieName)} variant="contained" color="primary">Return</Button>
                       }
                     </TableCell>
                   </TableRow>
