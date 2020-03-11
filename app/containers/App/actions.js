@@ -68,14 +68,25 @@ export function fetchUser(username,password){
   return (dispatch)=> {
     dispatch(getUser());
 
-    return new Promise((resolve,reject)=>{
-        resolve('{"id":1,"username":"haim","password":"111","isAdmin":true}');
+    return fetch('http://localhost:8080/Users/Login', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({name: 'lior shifer',password:'123456'})
     })
+    // return new Promise((resolve,reject)=>{
+    //     resolve('{"id":1,"username":"haim","password":"111","isAdmin":true}');
+    // })
       .then(res => {
         // throw Error('Invalid username or password');
-        return JSON.parse(res);
+        return res.json()//JSON.parse(res);
       })
-    .then(json=>dispatch(getUserSuccess(json)))
+    .then(json=>{
+      var a=3;
+      return dispatch(getUserSuccess(json))
+  })
     .catch(err=>dispatch(getUserError(err)))
   }
 }

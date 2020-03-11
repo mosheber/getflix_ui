@@ -21,7 +21,16 @@ const borrows = [
   }
 ]
 
-export function fetchBorrows(userId){
+// fetch('http://localhost:5000', {
+//     method: 'POST',
+//     headers: {
+//       'Accept': 'application/json',
+//       'Content-Type': 'application/json'
+//     },
+//     body: JSON.stringify({name: 'Textual content'})
+//   })
+
+export function fetchBorrows(shouldFilter,userName,movieName,dateRange,isReturned){
   return (dispatch)=> {
     dispatch(getBorrows());
 

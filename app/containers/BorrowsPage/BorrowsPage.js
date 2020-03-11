@@ -15,6 +15,16 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
 
+import Toolbar from '@material-ui/core/Toolbar';
+import AppBar from '@material-ui/core/AppBar';
+import InputBase from '@material-ui/core/InputBase';
+import SearchIcon from '@material-ui/icons/Search';
+import IconButton from '@material-ui/core/IconButton';
+
+import TextField from '@material-ui/core/TextField';
+import Switch from '@material-ui/core/Switch';
+import Typography from '@material-ui/core/Typography';
+
 const useStyles = {
   table: {
     minWidth: 650,
@@ -29,6 +39,13 @@ const getOverdue = (endDate) => {
   return 0
 }
 
+function getDateString(today){
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var yyyy = today.getFullYear();
+  return yyyy+'-'+mm+'-'+dd;
+}
+
 export default class BorrowsPage extends React.Component {
   // eslint-disable-line react/prefer-stateless-function
 
@@ -37,12 +54,33 @@ export default class BorrowsPage extends React.Component {
   constructor(props) {
     super(props);
     // Don't call this.setState() here!
-    
-    this.returnBook = this.returnBook.bind(this)
+    var today = new Date();
+    var todayString = getDateString(today);
+    this.state = {
+      search:{
+        movieName:'',
+        userName:'',
+        startDate:todayString,
+        endDate:todayString,
+        isReturned:false
+      }
+    }
+    this.returnBook = this.returnBook.bind(this);
+    this.doSearch = this.doSearch.bind(this);
   }
 
   componentDidMount(){
-    this.props.fetchBorrows(1);
+    this.props.fetchBorrows(false,'','',{},'');
+  }
+
+  doSearch(){
+    let movieName = this.state.search.movieName;
+    let userName = this.state.search.userName;
+    let startDate = this.state.search.startDate;
+    let endDate = this.state.search.endDate;
+    let isReturned = this.state.search.isReturned;
+
+    this.props.fetchBorrows(true,movieName,userName,{startDate,endDate},isReturned);
   }
 
   returnBook(id,movieName){
@@ -55,11 +93,81 @@ export default class BorrowsPage extends React.Component {
     })
   }
 
+  onChangeValue(e,key,e_field='value') {
+    var obj = this.state.search;
+    obj[key] = e.target[e_field];
+    
+    this.setState({
+      search:obj
+    });
+  }
+
   render() {
     const classes = useStyles;
     
     return (
+      <div>
+        <AppBar position="static" color="white">
+            <Toolbar>
+            
+              <InputBase
+                placeholder="Search Users..."
+                defaultValue={this.state.search.userName}
+                onChange={(e)=>this.onChangeValue(e,'userName')}
+              />
+              
+              <InputBase
+                placeholder="Search Movies..."
+                defaultValue={this.state.search.movieName}
+                onChange={(e)=>this.onChangeValue(e,'movieName')}
+              />
+              
+              <TextField
+               className="animated fadeIn"
+                label="Start Date"
+                type="date"
+                onChange={(e)=>this.onChangeValue(e,'startDate')}
+                defaultValue={this.state.search.startDate}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />          
+
+
+            <TextField
+               className="animated fadeIn"
+                label="End Date"
+                type="date"
+                onChange={(e)=>this.onChangeValue(e,'endDate')}
+                defaultValue={this.state.search.endDate}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />          
+            
+            <div>
+                <Typography color="textSecondary" gutterBottom>
+                  Is Returned?
+                </Typography>
+                <Switch
+                checked={this.state.search.isReturned}
+                onChange={(e)=>this.onChangeValue(e,'isReturned','checked')}
+                value="isReturned"
+                inputProps={{ 'aria-label': 'secondary checkbox' }}
+              /> 
+              </div>
+
+              <Button onClick = {() => this.doSearch()} color="primary">
+                <IconButton type="submit" aria-label="search">
+                <SearchIcon />
+                </IconButton>
+              </Button>
+
+            </Toolbar>
+          </AppBar>
+ 
       <Paper style={{display:'flex'}} elevation={3} >
+          
           <TableContainer component={Paper}>
             <Table className={classes.table} aria-label="simple table">
               <TableHead>
@@ -108,6 +216,8 @@ export default class BorrowsPage extends React.Component {
             </Table>
           </TableContainer>
       </Paper>
+
+      </div>
     );
   }
 }

@@ -57,12 +57,17 @@ export default class BrowsePage extends React.Component {
     }
     this.goToMovie = this.goToMovie.bind(this);
     this.borrowMovie = this.borrowMovie.bind(this);
+    this.doSearch = this.doSearch.bind(this);
   }
 
   componentDidMount(){
     this.props.fetchMovies(this.state.search.searchText,this.state.search.searchCategory);
   }
 
+
+  doSearch(){
+    this.props.fetchMovies(this.state.search.searchText,this.state.search.searchCategory);
+  }
 
   onChangeValue(e,key) {
     var obj = this.state.search;
@@ -71,7 +76,7 @@ export default class BrowsePage extends React.Component {
     this.setState({
       search:obj
     });
-    this.props.fetchMovies(obj.searchText,obj.searchCategory);
+    
   }
 
   goToMovie(id){
@@ -110,10 +115,7 @@ export default class BrowsePage extends React.Component {
                 defaultValue={this.state.search.searchText}
                 onChange={(e)=>this.onChangeValue(e,'searchText')}
               />
-              <IconButton type="submit" aria-label="search">
-                <SearchIcon />
-              </IconButton>
-            
+              
             <Select
               value={this.state.search.searchCategory}
               onChange={(e)=>this.onChangeValue(e,'searchCategory')}
@@ -126,7 +128,13 @@ export default class BrowsePage extends React.Component {
               <MenuItem value={'Family'}>Family</MenuItem>
               <MenuItem value={'Science-Fiction'}>Science-Fiction</MenuItem>
             </Select>
-            
+
+              <Button onClick = {() => this.doSearch()} color="primary">
+                <IconButton type="submit" aria-label="search">
+                <SearchIcon />
+                </IconButton>
+              </Button>
+         
             </Toolbar>
           </AppBar>
           <GridList cellHeight={360} className={classes.gridList} cols={5}>
