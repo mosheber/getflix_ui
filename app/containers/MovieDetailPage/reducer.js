@@ -41,6 +41,46 @@ export default function MovieReducer(state=initialState,action){
         error:true
       }
     },
+    'FETCHING_Comments':()=>{
+      return {
+        ...state,
+        isFetchingComments:true,
+      }
+    },
+    'FETCHING_Comments_SUCCESS':()=>{
+      return {
+        ...state,
+        isFetchingComments:false,
+        comments:action.data
+      }
+    },
+    'FETCHING_Comments_ERROR':()=>{
+      return {
+        ...state,
+        isFetchingComments:false,
+        errorComments:true
+      }
+    },
+    'POST_Comments':()=>{
+      return {
+        ...state,
+        isPOSTComments:true,
+      }
+    },
+    'POST_Comments_SUCCESS':()=>{
+      return {
+        ...state,
+        isPOSTComments:false,
+        commentsPostResult:action.data
+      }
+    },
+    'POST_Comments_ERROR':()=>{
+      return {
+        ...state,
+        isPOSTComments:false,
+        errorCommentsPOST:true
+      }
+    },
     'manageMovie_BEGIN':()=>{
       return {
         ...state,

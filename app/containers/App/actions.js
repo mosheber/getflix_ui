@@ -74,7 +74,7 @@ export function fetchUser(username,password){
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({name: 'lior shifer',password:'123456'})
+      body: JSON.stringify({name: username,password:password})
     })
     // return new Promise((resolve,reject)=>{
     //     resolve('{"id":1,"username":"haim","password":"111","isAdmin":true}');

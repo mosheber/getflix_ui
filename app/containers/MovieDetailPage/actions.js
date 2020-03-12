@@ -11,26 +11,29 @@ const movie = {
   description: `
   Avengers: Endgame is a 2019 American superhero film based on the Marvel Comics superhero team the Avengers, produced by Marvel Studios and distributed by Walt Disney Studios Motion Pictures. It is the sequel to 2012's The Avengers, 2015's Avengers: Age of Ultron, and 2018's Avengers: Infinity War, and the twenty-second film in the Marvel Cinematic Universe (MCU). It was directed by Anthony and Joe Russo and written by Christopher Markus and Stephen McFeely, and features an ensemble cast including Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth, Scarlett Johansson, Jeremy Renner, Don Cheadle, Paul Rudd, Brie Larson, Karen Gillan, Danai Gurira, Benedict Wong, Jon Favreau, Bradley Cooper, Gwyneth Paltrow, and Josh Brolin. In the film, the surviving members of the Avengers and their allies attempt to reverse the damage caused by Thanos in Infinity War.
   `,
-  id:1,
-  comments:[
-    {
-      id:1,
-      userId:2,
-      userName:'shlomo',
-      text: "Good Movie",
-      date: '2019-04-03',
-      grade: 4
-    },
-    {
-      id:2,
-      userId:1,
-      userName:'moshe',
-      text: "Sweeeet",
-      date: '2019-04-04',
-      grade: 5
-    }
-  ]
+  id:1
 }
+
+let comments = [
+  {
+    id:1,
+    userId:32,
+    userName:'shlomo',
+    movieId:1,
+    text: "Good Movie",
+    date: '2019-04-03',
+    grade: 4
+  },
+  {
+    id:2,
+    userId:15,
+    userName:'yoho',
+    movieId:1,
+    text: "Sweeeet",
+    date: '2019-04-04',
+    grade: 5
+  }
+]
 
 export function fetchMovie(id){
   return (dispatch)=> {
@@ -67,6 +70,83 @@ function getMovieError(data){
     type:'FETCHING_Movie_ERROR'
   }
 }
+
+export function fetchComments(id){
+  return (dispatch)=> {
+    dispatch(getComments());
+
+    return new Promise((resolve,reject)=>{
+        resolve(JSON.stringify(comments));
+    })
+      .then(res => {
+        return JSON.parse(res);
+      })
+    .then(json=>dispatch(getCommentsSuccess(json)))
+    .catch(err=>dispatch(getCommentsError(err)))
+  }
+}
+
+
+function getComments(){
+  return {
+    type:'FETCHING_Comments'
+  }
+}
+
+
+function getCommentsSuccess(data){
+  return {
+    type:'FETCHING_Comments_SUCCESS',
+    data
+  }
+}
+
+function getCommentsError(data){
+  return {
+    type:'FETCHING_Comments_ERROR'
+  }
+}
+
+
+
+export function postComment(comment){
+  comments.push(comment);
+  return (dispatch)=> {
+    dispatch(postCommentBegin());
+
+    return new Promise((resolve,reject)=>{
+        
+        resolve(JSON.stringify(comments));
+    })
+      .then(res => {
+        return JSON.parse(res);
+      })
+    .then(json=>dispatch(postCommentsSuccess(json)))
+    .catch(err=>dispatch(postCommentsError(err)))
+  }
+}
+
+
+function postCommentBegin(){
+  return {
+    type:'POST_Comments'
+  }
+}
+
+
+function postCommentsSuccess(data){
+  return {
+    type:'POST_Comments_SUCCESS',
+    data
+  }
+}
+
+function postCommentsError(data){
+  return {
+    type:'POST_Comments_ERROR'
+  }
+}
+
 
 
 export function manageMovie(movieObj){

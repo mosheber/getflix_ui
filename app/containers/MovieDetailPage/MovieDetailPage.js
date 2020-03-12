@@ -140,6 +140,7 @@ export default class MovieDetailPage extends React.Component {
         this.setState({
           movie:res.data
         })
+        this.props.fetchComments(this.props.currentMovie.movie.id);
       }else{
         console.log('fetch failed');
       }
@@ -189,19 +190,19 @@ export default class MovieDetailPage extends React.Component {
   }
 
   onAddComment(){
-    let movie = this.state.movie
-    let all_user = movie.comments.map(x => x.id)
+    let all_user = this.props.currentMovie.comments.map(x => x.userId)
 
-    if(all_user.includes(this.props.user.user.id) && false){ //REMOVE false WHEN PRODDDD
+    if(all_user.includes(this.props.user.user.id)){ //REMOVE false WHEN PRODDDD
       alert('You already gave your comment.');
     }else{
-      movie.comments.push({
+      let comment = {
+        userId: this.props.user.user.id,
         userName: this.props.user.user.username,
         text: this.state.mainValues.comment,
         grade: this.state.mainValues.rating
-      });
-      this.setState({
-        movie:movie
+      };
+      this.props.postComment(comment).then(res=>{
+        this.props.fetchComments(this.props.currentMovie.movie.id);
       })
     }
   }
@@ -315,7 +316,7 @@ export default class MovieDetailPage extends React.Component {
                     <Button onClick={this.onAddComment} color='primary'>Post</Button>
                   </ListItem>
                   {
-                    this.props.currentMovie.movie.comments.map(com => 
+                    this.props.currentMovie.comments ? this.props.currentMovie.comments.map(com => 
                       (
                         <div>
                             <ListItem alignItems="flex-start">
@@ -348,7 +349,7 @@ export default class MovieDetailPage extends React.Component {
                             <Divider variant="inset" component="li" />
                         </div>                  
                       )
-                      )
+                      ) : null
                   }
               </List>
           </div>

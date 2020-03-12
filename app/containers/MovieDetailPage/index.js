@@ -4,7 +4,7 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import injectReducer from 'utils/injectReducer';
 //import injectSaga from 'utils/injectSaga';
-import { fetchMovie,manageMovie } from './actions';
+import { fetchMovie,manageMovie,fetchComments,postComment } from './actions';
 import reducer from './reducer';
 // import saga from './saga';
 import MovieDetailPage from './MovieDetailPage';
@@ -21,6 +21,8 @@ function mapStateToProps(state) {
     return {
       fetchMovie: (id) => dispatch(fetchMovie(id)),
       manageMovie: (movieObj) => dispatch(manageMovie(movieObj)),
+      fetchComments: (id) => dispatch(fetchComments(id)),
+      postComment: (id) => dispatch(postComment(id)),
     }
   }
 
