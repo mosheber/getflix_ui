@@ -101,12 +101,15 @@ export default class MovieDetailPage extends React.Component {
     var isCreate = !this.state.movie.hasOwnProperty('id');
     
     this.props.manageMovie(this.state.movie).then(res=>{
+      let messageAlert = ""
       if(res.type.includes('ERROR')){
-        alert('Error: '+ res.toString())
+        messageAlert = 'Error: '+ res.toString()
       }else{
         let message = isCreate ? 'Creating' : 'Editing';
-        alert(message + ' the movie '+ this.state.movie.name + ' was successful!');
+        messageAlert = message + ' the movie '+ this.state.movie.name + ' was successful!';
       }
+      this.props.history.push('/browse');
+      alert(messageAlert);
     })
   }
 
@@ -145,17 +148,6 @@ export default class MovieDetailPage extends React.Component {
       this.props.fetchMovie(movieId).then(res=>{
         
         if(res.type.includes('SUCCESS')){
-          // let propMovie = this.props.currentMovie.movie;
-          // for(var key in propMovie){
-          //   let value = propMovie[key];
-          //   let e = {
-          //     target:{
-          //       value:value,
-          //       checked:value
-          //     }
-          //   }
-          //   this.onChangeValue(e,key);
-          // }
           this.setState({
             movie:this.props.currentMovie.movie
           })
@@ -321,11 +313,11 @@ export default class MovieDetailPage extends React.Component {
                 <Button onClick={this.onAddCategory} color='primary' size="large">Add Category</Button>
                 <div style={{padding:10}}></div>
               {
-                this.state.movie.categories.map(cat => 
+                this.state.movie.categories ? this.state.movie.categories.map(cat => 
                     (
                       <Chip label={cat} onDelete={() => this.onRemoveCategory(cat)} color="primary" />
                     )
-                  )
+                  ) : null
               }
               
             </CardContent>

@@ -1,3 +1,5 @@
+import {MAPPING_MOVIE,apiDecode} from 'utils/constants';
+
 function evalState(actions,action,state){
   if(Object.keys(actions).indexOf(action.type)>-1){
     return actions[action.type]();
@@ -30,6 +32,7 @@ export default function MovieReducer(state=initialState,action){
       }
     },
     'FETCHING_Movie_SUCCESS':()=>{
+      let movieReady = apiDecode(action.data,MAPPING_MOVIE);
       return {
         ...state,
         isFetching:false,

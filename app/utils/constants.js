@@ -5,7 +5,11 @@ export const MAPPING_USER = {
 'username':'name',
 'isAdmin':'admin'
 }
-  
+export const MAPPING_MOVIE = {
+'publishDate':'insertionTime',
+'img':'image'
+} 
+
   export function apiEncode(obj,mapping){
     for (let oldKey in mapping) {
       let newKey = mapping[oldKey];

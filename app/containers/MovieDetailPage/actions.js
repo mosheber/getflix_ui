@@ -11,7 +11,7 @@ const movie = {
   description: `
   Avengers: Endgame is a 2019 American superhero film based on the Marvel Comics superhero team the Avengers, produced by Marvel Studios and distributed by Walt Disney Studios Motion Pictures. It is the sequel to 2012's The Avengers, 2015's Avengers: Age of Ultron, and 2018's Avengers: Infinity War, and the twenty-second film in the Marvel Cinematic Universe (MCU). It was directed by Anthony and Joe Russo and written by Christopher Markus and Stephen McFeely, and features an ensemble cast including Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth, Scarlett Johansson, Jeremy Renner, Don Cheadle, Paul Rudd, Brie Larson, Karen Gillan, Danai Gurira, Benedict Wong, Jon Favreau, Bradley Cooper, Gwyneth Paltrow, and Josh Brolin. In the film, the surviving members of the Avengers and their allies attempt to reverse the damage caused by Thanos in Infinity War.
   `,
-  id:1,
+  id:4,
   length:'120',
   quantity:'1',
 }
@@ -41,11 +41,10 @@ let comments = [
 function getDefMovie(){
   let defMovie = {
     name:'some name',
-    img:'none',
+    image:'none',
     director:'some dir',
     description:'some desc',
-    categories: [],
-    publishDate:'2000-01-01',
+    insertionTime:'2000-01-01',
     id:0,
     length:'120',
     quantity:'1'
@@ -59,21 +58,26 @@ function getDefMovie(){
   })
 }
 
-function getSomeMovie(){
-  return new Promise((resolve,reject)=>{
-    resolve(JSON.stringify(movie));
-  })
-  .then(res => {
-    return JSON.parse(res);
+function getSomeMovie(id){
+  return fetch('http://localhost:8080/Movies/'+id.toString(), {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
   })
 }
 
 export function fetchMovie(id){
   return (dispatch)=> {
     dispatch(getMovie());
-    let movieToGet = id.toString() == '0' ? getDefMovie() : getSomeMovie();
+    let movieToGet = id.toString() == '0' ? getDefMovie() : getSomeMovie(id);
     return movieToGet
-    .then(json=>dispatch(getMovieSuccess(json)))
+    .then(res=>res.json())
+    .then(json=>{
+      let a=3;
+      return dispatch(getMovieSuccess(json))
+  })
     .catch(err=>dispatch(getMovieError(err)))
   }
 }

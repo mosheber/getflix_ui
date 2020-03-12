@@ -46,7 +46,7 @@ export default class Header extends React.Component { // eslint-disable-line rea
                   Browse Catalog            
                 </Link>
               </Typography>
-              <Typography variant="h6" style={classes.title} onClick={this.cleanMovie}>
+              <Typography variant="h6" style={classes.title}>
                 <Link className="router-link" to="/movie/0">
                   Add a Movie
                 </Link>
