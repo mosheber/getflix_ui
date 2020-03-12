@@ -71,11 +71,15 @@ export default class MovieDetailPage extends React.Component {
     // Don't call this.setState() here!
     this.state = { 
       movie:{
-        name:'none',
+        name:'some name',
         img:'none',
-        director:'none',
-        description:'none',
-        publishDate:'2000-01-01'
+        director:'some dir',
+        description:'some desc',
+        publishDate:'2000-01-01',
+        length:'120',
+        quantity:'1',
+        categories:[],
+        id:0
       },
       mainValues:{
         addCategory:'All',
@@ -126,25 +130,42 @@ export default class MovieDetailPage extends React.Component {
     let pathname = this.props.history.location.pathname;
     let movieId = pathname.split('/').pop() ;
 
-    if(movieId=='0'){
+    if(movieId.toString()=='0'){
       console.log('create movie');
+      this.setState({
+        movie:this.state.movie
+      })
+      this.props.currentMovie.comments = []
     }else{
       // this.setState({
       //   editable:true
       // });
       console.log('edit movie');
+
+      this.props.fetchMovie(movieId).then(res=>{
+        
+        if(res.type.includes('SUCCESS')){
+          // let propMovie = this.props.currentMovie.movie;
+          // for(var key in propMovie){
+          //   let value = propMovie[key];
+          //   let e = {
+          //     target:{
+          //       value:value,
+          //       checked:value
+          //     }
+          //   }
+          //   this.onChangeValue(e,key);
+          // }
+          this.setState({
+            movie:this.props.currentMovie.movie
+          })
+          this.props.fetchComments(this.props.currentMovie.movie.id);
+        }else{
+          console.log('fetch failed');
+        }
+      })
     }
     
-    this.props.fetchMovie(movieId).then(res=>{
-      if(res.type.includes('SUCCESS')){
-        this.setState({
-          movie:res.data
-        })
-        this.props.fetchComments(this.props.currentMovie.movie.id);
-      }else{
-        console.log('fetch failed');
-      }
-    })
   }
 
   onRemoveCategory(cat){
@@ -215,7 +236,7 @@ export default class MovieDetailPage extends React.Component {
           <div style={{display:'flex',flexDirection:'column'}}>
             {
               this.state.movie.img == 'none' ? 
-              <img src={this.props.currentMovie.movie.img} style={{width:300,height:500}} />
+              <img src={this.state.movie.img} style={{width:300,height:500}} />
               : <img src={this.state.movie.img} style={{width:300,height:500}} />
             }
 
@@ -234,15 +255,30 @@ export default class MovieDetailPage extends React.Component {
               <TextField
                className="animated fadeIn"
                 label="Movie name"
-                defaultValue={this.props.currentMovie.movie.name}
+                value={this.state.movie.name}
                 onChange={(e)=>this.onChangeValue(e,'name')}
+              />
+
+              <TextField
+               className="animated fadeIn"
+                label="Movie Length in Minutes"
+                value={this.state.movie.length}
+                onChange={(e)=>this.onChangeValue(e,'length')}
+              />
+
+
+              <TextField
+               className="animated fadeIn"
+                label="Movie quantity in store"
+                value={this.state.movie.quantity}
+                onChange={(e)=>this.onChangeValue(e,'quantity')}
               />
 
               <div style={{padding:30}}></div>
               <TextField
                className="animated fadeIn"
                 label="Director"
-                defaultValue={this.props.currentMovie.movie.director}
+                value={this.state.movie.director}
                 helperText="The director of the movie"
                 onChange={(e)=>this.onChangeValue(e,'director')}
               />
@@ -252,7 +288,7 @@ export default class MovieDetailPage extends React.Component {
                className="animated fadeIn"
                 label="Publish Date"
                 type="date"
-                defaultValue={this.props.currentMovie.movie.publishDate}
+                value={this.state.movie.publishDate}
                 onChange={(e)=>this.onChangeValue(e,'publishDate')}
                 InputLabelProps={{
                   shrink: true,
@@ -263,7 +299,7 @@ export default class MovieDetailPage extends React.Component {
               <TextField
                className="animated fadeIn"
                 label="Description"
-                defaultValue={this.props.currentMovie.movie.description}
+                value={this.state.movie.description}
                 onChange={(e)=>this.onChangeValue(e,'description')}
                 multiline
                 style={{width:500}}
@@ -285,7 +321,7 @@ export default class MovieDetailPage extends React.Component {
                 <Button onClick={this.onAddCategory} color='primary' size="large">Add Category</Button>
                 <div style={{padding:10}}></div>
               {
-                this.props.currentMovie.movie.categories.map(cat => 
+                this.state.movie.categories.map(cat => 
                     (
                       <Chip label={cat} onDelete={() => this.onRemoveCategory(cat)} color="primary" />
                     )

@@ -9,13 +9,15 @@ function evalState(actions,action,state){
 
 const initialState={
   movie:{
-    name:'none',
+    name:'some name',
     img:'none',
-    director:'none',
-    description:'none',
+    director:'some dir',
+    description:'some desc',
     categories: [],
     publishDate:'2000-01-01',
-    comments:[]
+    id:0,
+    length:'120',
+    quantity:'1'
   },
 } 
 

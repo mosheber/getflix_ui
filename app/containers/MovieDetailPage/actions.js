@@ -11,7 +11,9 @@ const movie = {
   description: `
   Avengers: Endgame is a 2019 American superhero film based on the Marvel Comics superhero team the Avengers, produced by Marvel Studios and distributed by Walt Disney Studios Motion Pictures. It is the sequel to 2012's The Avengers, 2015's Avengers: Age of Ultron, and 2018's Avengers: Infinity War, and the twenty-second film in the Marvel Cinematic Universe (MCU). It was directed by Anthony and Joe Russo and written by Christopher Markus and Stephen McFeely, and features an ensemble cast including Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth, Scarlett Johansson, Jeremy Renner, Don Cheadle, Paul Rudd, Brie Larson, Karen Gillan, Danai Gurira, Benedict Wong, Jon Favreau, Bradley Cooper, Gwyneth Paltrow, and Josh Brolin. In the film, the surviving members of the Avengers and their allies attempt to reverse the damage caused by Thanos in Infinity War.
   `,
-  id:1
+  id:1,
+  length:'120',
+  quantity:'1',
 }
 
 let comments = [
@@ -35,16 +37,42 @@ let comments = [
   }
 ]
 
+
+function getDefMovie(){
+  let defMovie = {
+    name:'some name',
+    img:'none',
+    director:'some dir',
+    description:'some desc',
+    categories: [],
+    publishDate:'2000-01-01',
+    id:0,
+    length:'120',
+    quantity:'1'
+  }
+
+  return new Promise((resolve,reject)=>{
+    resolve(JSON.stringify(defMovie));
+  })
+  .then(res => {
+    return JSON.parse(res);
+  })
+}
+
+function getSomeMovie(){
+  return new Promise((resolve,reject)=>{
+    resolve(JSON.stringify(movie));
+  })
+  .then(res => {
+    return JSON.parse(res);
+  })
+}
+
 export function fetchMovie(id){
   return (dispatch)=> {
     dispatch(getMovie());
-
-    return new Promise((resolve,reject)=>{
-        resolve(JSON.stringify(movie));
-    })
-      .then(res => {
-        return JSON.parse(res);
-      })
+    let movieToGet = id.toString() == '0' ? getDefMovie() : getSomeMovie();
+    return movieToGet
     .then(json=>dispatch(getMovieSuccess(json)))
     .catch(err=>dispatch(getMovieError(err)))
   }
@@ -148,17 +176,75 @@ function postCommentsError(data){
 }
 
 
+// String name,
+//              String description,
+//              String director,
+//              int length,
+//              int quantity,
+//              Date insertionTime,
+//              String image
+// -> 
+// name: '',
+//   director: 'Russo Brothers',
+//   publishDate: '2019-04-22',
+//   categories: []
+//   description: ''
+//   id:1
+
+import {MAPPING_MOVIE,apiEncode} from 'utils/constants';
+
+function createMovie(movie){
+  let categories = movie['categories']
+  delete movie['categories'];
+  let movieReady = apiEncode(movie,MAPPING_MOVIE)
+  
+  return fetch('http://localhost:8080/Movies', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(movieReady)
+  })
+}
+
+function editMovie(movie){
+  let categories = movie['categories']
+  delete movie['categories'];
+  let movieReady = apiEncode(movie,MAPPING_MOVIE)
+  
+  return fetch('http://localhost:8080/Movies/'+movieReady['id'], {
+    method: 'PUT',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(movieReady)
+  })
+}
 
 export function manageMovie(movieObj){
   return (dispatch)=> {
     dispatch(manageMovieBegin());
 
-    return new Promise((resolve,reject)=>{
-        resolve(JSON.stringify(movieObj));
+    let request_to_do = null;
+    if(movieObj['id']==0){
+      request_to_do = createMovie(movieObj);
+    }else{
+      request_to_do = editMovie(movieObj);
+    }
+
+    // return new Promise((resolve,reject)=>{
+    //     resolve(JSON.stringify(movieObj));
+    // })
+    //   .then(res => {
+    //     return JSON.parse(res);
+    //   })
+    return request_to_do
+    .then(res=>{
+      var a =3;
+      return res.json()
     })
-      .then(res => {
-        return JSON.parse(res);
-      })
     .then(json=>dispatch(manageMovieSuccess(json)))
     .catch(err=>dispatch(manageMovieError(err)))
   }

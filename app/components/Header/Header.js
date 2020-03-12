@@ -23,12 +23,12 @@ export default class Header extends React.Component { // eslint-disable-line rea
     super(props);
     // Don't call this.setState() here!
 //    this.goTo=this.goTo.bind(this);  
+    this.cleanMovie = this.cleanMovie.bind(this);
   }
 
-  // goTo(path){
-  //   console.log('goto');
-  //   this.props.history.push(path)
-  // }
+  cleanMovie(){
+    this.props.fetchMovie('0');
+  }
   render() {
     return (
         <div style={classes.root}>
@@ -46,7 +46,7 @@ export default class Header extends React.Component { // eslint-disable-line rea
                   Browse Catalog            
                 </Link>
               </Typography>
-              <Typography variant="h6" style={classes.title}>
+              <Typography variant="h6" style={classes.title} onClick={this.cleanMovie}>
                 <Link className="router-link" to="/movie/0">
                   Add a Movie
                 </Link>

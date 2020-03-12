@@ -1,3 +1,5 @@
+import {apiDecode,MAPPING_USER} from 'utils/constants'
+
 function evalState(actions,action,state){
     if(Object.keys(actions).indexOf(action.type)>-1){
       return actions[action.type]();
@@ -18,29 +20,6 @@ const initialState={
     registerErrorMessage:''
 } 
 
-let mapping = {
-  'username':'name',
-  'isAdmin':'admin'
-}
-
-function apiEncode(obj,mapping){
-  for (let oldKey in mapping) {
-    let newKey = mapping[oldKey];
-    obj[newKey] = obj[oldKey];
-    delete obj[oldKey];
-  }
-  return obj;
-}
-
-function apiDecode(obj,mapping){
-  for (let oldKey in mapping) {
-    let newKey = mapping[oldKey];
-    obj[oldKey] = obj[newKey];
-    delete obj[newKey];
-  }
-  return obj;
-}
-
 export default function userReducer(state=initialState,action){
     const actions={
       'FETCHING_USER':()=>{
@@ -50,7 +29,7 @@ export default function userReducer(state=initialState,action){
         }
       },
       'FETCHING_USER_SUCCESS':()=>{
-        let user = apiDecode(action.data,mapping);
+        let user = apiDecode(action.data,MAPPING_USER);
         return {
           ...state,
           isFetching:false,
