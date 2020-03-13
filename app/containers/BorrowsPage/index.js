@@ -18,7 +18,7 @@ function mapStateToProps(state) {
   
   function mapDispatchToProps(dispatch) {
     return {
-      fetchBorrows: (shouldFilter,userName,movieName,dateRange,isReturned) => dispatch(fetchBorrows(shouldFilter,userName,movieName,dateRange,isReturned)),
+      fetchBorrows: (userName,movieName,dateRange,isReturned) => dispatch(fetchBorrows(userName,movieName,dateRange,isReturned)),
       returnMovie: (borrowId) => dispatch(returnMovie(borrowId)),
     }
   }

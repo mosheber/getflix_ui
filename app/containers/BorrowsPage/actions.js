@@ -21,24 +21,37 @@ const borrows = [
   }
 ]
 
-// fetch('http://localhost:5000', {
-//     method: 'POST',
-//     headers: {
-//       'Accept': 'application/json',
-//       'Content-Type': 'application/json'
-//     },
-//     body: JSON.stringify({name: 'Textual content'})
-//   })
 
-export function fetchBorrows(shouldFilter,userName,movieName,dateRange,isReturned){
+// private int id;
+// private int userId;
+// private int movieId;
+// private Date startDate;
+// private Date endDate;
+// private boolean isReturned;
+//->
+// id:2,
+//     userId:1,
+//     *userName: 'moshe',
+//     movieId:3,
+//     *movieName: 'Lion King',
+//     startDate: '2019-01-02',
+//     endDate: '2019-01-09',
+//     isReturned: true
+
+export function fetchBorrows(userName,movieName,dateRange,isReturned){
+
   return (dispatch)=> {
     dispatch(getBorrows());
 
-    return new Promise((resolve,reject)=>{
-        resolve(JSON.stringify(borrows));
+    return fetch('http://localhost:8080/rents', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
     })
       .then(res => {
-        return JSON.parse(res);
+        return res.json();
       })
     .then(json=>dispatch(getBorrowsSuccess(json)))
     .catch(err=>dispatch(getBorrowsError(err)))

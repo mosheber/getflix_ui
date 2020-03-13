@@ -22,8 +22,9 @@ import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
 
 import TextField from '@material-ui/core/TextField';
-import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 
 const useStyles = {
   table: {
@@ -62,7 +63,7 @@ export default class BorrowsPage extends React.Component {
         userName:'',
         startDate:todayString,
         endDate:todayString,
-        isReturned:false
+        isReturned:'all'
       }
     }
     this.returnBook = this.returnBook.bind(this);
@@ -70,7 +71,7 @@ export default class BorrowsPage extends React.Component {
   }
 
   componentDidMount(){
-    this.props.fetchBorrows(false,'','',{},'');
+    this.doSearch();
   }
 
   doSearch(){
@@ -80,7 +81,7 @@ export default class BorrowsPage extends React.Component {
     let endDate = this.state.search.endDate;
     let isReturned = this.state.search.isReturned;
 
-    this.props.fetchBorrows(true,movieName,userName,{startDate,endDate},isReturned);
+    this.props.fetchBorrows(userName,movieName,{startDate,endDate},isReturned);
   }
 
   returnBook(id,movieName){
@@ -146,15 +147,17 @@ export default class BorrowsPage extends React.Component {
               />          
             
             <div>
-                <Typography color="textSecondary" gutterBottom>
+            <Typography color="textSecondary" gutterBottom>
                   Is Returned?
                 </Typography>
-                <Switch
-                checked={this.state.search.isReturned}
-                onChange={(e)=>this.onChangeValue(e,'isReturned','checked')}
-                value="isReturned"
-                inputProps={{ 'aria-label': 'secondary checkbox' }}
-              /> 
+            <Select
+              value={this.state.search.isReturned}
+              onChange={(e)=>this.onChangeValue(e,'isReturned')}
+            >
+              <MenuItem value={'all'}>All</MenuItem>
+              <MenuItem value={'yes'}>Yes</MenuItem>
+              <MenuItem value={'no'}>No</MenuItem>
+            </Select>
               </div>
 
               <Button onClick = {() => this.doSearch()} color="primary">
@@ -194,10 +197,10 @@ export default class BorrowsPage extends React.Component {
                     </TableCell>
                     {
                       this.props.user.user.isAdmin ? 
-                      <TableCell align="right">{row.userName}</TableCell> :
+                      <TableCell align="right">{row.userId}</TableCell> :
                       null
                     }
-                    <TableCell align="right">{row.movieName}</TableCell>
+                    <TableCell align="right">{row.movieId}</TableCell>
                     <TableCell align="right">{row.startDate}</TableCell>
                     <TableCell align="right">{row.endDate}</TableCell>
                     <TableCell align="right">
