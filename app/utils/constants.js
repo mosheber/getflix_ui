@@ -9,6 +9,9 @@ export const MAPPING_MOVIE = {
 'publishDate':'insertionTime',
 'img':'image'
 } 
+export const MAPPING_COMMENT = {
+  'text':'content',
+  } 
 
   export function apiEncode(obj,mapping){
     for (let oldKey in mapping) {

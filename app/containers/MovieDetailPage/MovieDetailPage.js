@@ -202,22 +202,25 @@ export default class MovieDetailPage extends React.Component {
     }
   }
 
-  onAddComment(){
-    let all_user = this.props.currentMovie.comments.map(x => x.userId)
 
-    if(all_user.includes(this.props.user.user.id)){ //REMOVE false WHEN PRODDDD
+
+  onAddComment(){
+    let curCom = this.props.currentMovie.comments;
+    let curUser = this.props.user.user.id;
+    if(curCom && curCom.length>0 && curCom.map(x => x.userId).includes(curUser)){
       alert('You already gave your comment.');
-    }else{
-      let comment = {
-        userId: this.props.user.user.id,
-        userName: this.props.user.user.username,
-        text: this.state.mainValues.comment,
-        grade: this.state.mainValues.rating
-      };
-      this.props.postComment(comment).then(res=>{
-        this.props.fetchComments(this.props.currentMovie.movie.id);
-      })
+      return;
     }
+    let comment = {
+      userId: this.props.user.user.id,
+      movieId: this.state.movie.id,
+      text: this.state.mainValues.comment,
+      grade: this.state.mainValues.rating
+    };
+    this.props.postComment(comment).then(res=>{
+      this.props.fetchComments(this.state.movie.id);
+    })
+  
   }
 
   render() {
@@ -352,7 +355,7 @@ export default class MovieDetailPage extends React.Component {
                                 <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
                               </ListItemAvatar>
                               <ListItemText
-                                primary={com.userName}
+                                primary={com.userId}
                                 secondary={
                                   <React.Fragment>
                                     <Typography
@@ -365,9 +368,6 @@ export default class MovieDetailPage extends React.Component {
                                     <Rating
                                       name="simple-controlled"
                                       value={com.grade}
-                                      onChange={(event, newValue) => {
-                                        console.log(newValue);
-                                      }}
                                       readOnly
                                     />
                                   </React.Fragment>

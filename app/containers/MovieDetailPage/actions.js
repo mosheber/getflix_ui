@@ -103,15 +103,20 @@ function getMovieError(data){
   }
 }
 
-export function fetchComments(id){
+export function fetchComments(movieId){
   return (dispatch)=> {
     dispatch(getComments());
 
-    return new Promise((resolve,reject)=>{
-        resolve(JSON.stringify(comments));
+    fetch('http://localhost:8080//Comments/ByMovieId/'+movieId, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
     })
       .then(res => {
-        return JSON.parse(res);
+        let a=3;
+        return res.json();
       })
     .then(json=>dispatch(getCommentsSuccess(json)))
     .catch(err=>dispatch(getCommentsError(err)))
@@ -140,18 +145,35 @@ function getCommentsError(data){
 }
 
 
+// private int id;
+// private int userId;
+// private int movieId;
+// private String content;
+// private float grade;
+//->
+// id:1,
+//     userId:32,
+//     userName:'shlomo',
+//     movieId:1,
+//     text: "Good Movie",
+//     grade: 4
 
 export function postComment(comment){
-  comments.push(comment);
+  let commentReady = apiEncode(comment,MAPPING_COMMENT)  
   return (dispatch)=> {
     dispatch(postCommentBegin());
 
-    return new Promise((resolve,reject)=>{
-        
-        resolve(JSON.stringify(comments));
+    return fetch('http://localhost:8080/Comments', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(commentReady)
     })
       .then(res => {
-        return JSON.parse(res);
+        let a=3;
+        return res.json();
       })
     .then(json=>dispatch(postCommentsSuccess(json)))
     .catch(err=>dispatch(postCommentsError(err)))
@@ -195,7 +217,7 @@ function postCommentsError(data){
 //   description: ''
 //   id:1
 
-import {MAPPING_MOVIE,apiEncode} from 'utils/constants';
+import {MAPPING_COMMENT,MAPPING_MOVIE,apiEncode} from 'utils/constants';
 
 function createMovie(movie){
   let categories = movie['categories']

@@ -1,4 +1,4 @@
-import {MAPPING_MOVIE,apiDecode} from 'utils/constants';
+import {MAPPING_MOVIE,apiDecode,MAPPING_COMMENT} from 'utils/constants';
 
 function evalState(actions,action,state){
   if(Object.keys(actions).indexOf(action.type)>-1){
@@ -53,10 +53,11 @@ export default function MovieReducer(state=initialState,action){
       }
     },
     'FETCHING_Comments_SUCCESS':()=>{
+      let commentsReady = action.data.map(x=>apiDecode(x,MAPPING_COMMENT));
       return {
         ...state,
         isFetchingComments:false,
-        comments:action.data
+        comments:commentsReady
       }
     },
     'FETCHING_Comments_ERROR':()=>{
