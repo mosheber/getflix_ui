@@ -56,15 +56,45 @@ const tileData = [
   },
 ]
 
+import {CATEGORY_MAPPING} from 'utils/constants';
+
+function getAllMovies(){
+  return fetch('http://localhost:8080/Movies', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+}
+
+function searchMovies(category,searchString){
+  let categoryId = CATEGORY_MAPPING[category];
+  return fetch('http://localhost:8080/Movies/ByCategory/'+categoryId, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+}
+
+
 export function fetchMovies(category,searchString){
+  let get_movies = category == 'All' ? getAllMovies() : searchMovies(category,searchString);
   return (dispatch)=> {
     dispatch(getMovies());
 
-    return new Promise((resolve,reject)=>{
-        resolve(JSON.stringify(tileData));
-    })
+    return get_movies
       .then(res => {
-        return JSON.parse(res);
+        return res.json();
+      })
+      .then(movies=>{
+        let moviesWithImages = movies.filter(x=>x.image && x.image.includes('data'));
+        if(searchString==''){
+          return moviesWithImages;
+        }
+        return moviesWithImages.filter(x=>x.name.includes(searchString) || x.description.includes(searchString))
       })
     .then(json=>dispatch(getMoviesSuccess(json)))
     .catch(err=>dispatch(getMoviesError(err)))

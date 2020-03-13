@@ -11,7 +11,16 @@ export const MAPPING_MOVIE = {
 } 
 export const MAPPING_COMMENT = {
   'text':'content',
-  } 
+  }
+  
+export const CATEGORY_MAPPING = {
+  'Comedy':3,
+  'Action':4,
+  'Drama':5,
+  'Thriller':6,
+  'Family':7,
+  'Science-Fiction':8
+}
 
   export function apiEncode(obj,mapping){
     for (let oldKey in mapping) {

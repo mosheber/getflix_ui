@@ -61,12 +61,12 @@ export default class BrowsePage extends React.Component {
   }
 
   componentDidMount(){
-    this.props.fetchMovies(this.state.search.searchText,this.state.search.searchCategory);
+    this.props.fetchMovies(this.state.search.searchCategory,this.state.search.searchText);
   }
 
 
   doSearch(){
-    this.props.fetchMovies(this.state.search.searchText,this.state.search.searchCategory);
+    this.props.fetchMovies(this.state.search.searchCategory,this.state.search.searchText);
   }
 
   onChangeValue(e,key) {

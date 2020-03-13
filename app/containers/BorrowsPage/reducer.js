@@ -1,3 +1,5 @@
+import {MAPPING_MOVIE,apiDecode} from 'utils/constants';
+
 function evalState(actions,action,state){
   if(Object.keys(actions).indexOf(action.type)>-1){
     return actions[action.type]();
@@ -43,7 +45,8 @@ export default function BorrowsReducer(state=initialState,action){
       return {
         ...state,
         isFetching:false,
-        error:true
+        error:true,
+        borrows:[]
       }
     },
     'BORROW_MOVIE_BEGIN':()=>{
