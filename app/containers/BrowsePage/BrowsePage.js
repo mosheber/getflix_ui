@@ -26,6 +26,8 @@ import Select from '@material-ui/core/Select';
 import {getDateString} from 'utils/constants';
 import Modal from '@material-ui/core/Modal';
 import TextField from '@material-ui/core/TextField';
+import Backdrop from '@material-ui/core/Backdrop';
+
 
 const useStyles = {
   root: {
@@ -135,22 +137,29 @@ export default class BrowsePage extends React.Component {
           aria-describedby="simple-modal-description"
           open={this.state.modalOpen}
           onClose={this.handleCloseModel}
+          BackdropComponent={Backdrop}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
         >
-          <div>
-          <TextField
-               className="animated fadeIn"
-                label="When will you return the movie?"
-                type="date"
-                onChange={(e)=>this.onChangeValue(e,'endDate')}
-                value={this.state.search.endDate}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-              <Fab onClick={this.borrowMovie} color="secondary" variant="extended">
-                      {/* <NavigationIcon className={classes.extendedIcon} /> */}
-                      Take
-                    </Fab>
+          <div style={{backgroundColor:'white',paddingTop:'30px',paddingLeft:'30px',paddingRight:'30px',paddingBottom:'30px'}}>
+            <h3>When will you return the movie?</h3>
+            <TextField
+                className="animated fadeIn"
+                  label=""
+                  type="date"
+                  onChange={(e)=>this.onChangeValue(e,'endDate')}
+                  value={this.state.search.endDate}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+                <Fab onClick={this.borrowMovie} color="secondary" variant="extended">
+                        {/* <NavigationIcon className={classes.extendedIcon} /> */}
+                        Take
+                      </Fab>
           </div>
         </Modal>
         <Helmet>
