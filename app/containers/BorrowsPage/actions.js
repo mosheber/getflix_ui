@@ -1,24 +1,4 @@
 const borrows = [
-  {
-    id:1,
-    userId:2,
-    userName: 'shlomo',
-    movieId:2,
-    movieName: 'Avengers: Endgame',
-    startDate: '2019-01-01',
-    endDate: '2019-01-14',
-    isReturned: false
-  },
-  {
-    id:2,
-    userId:1,
-    userName: 'moshe',
-    movieId:3,
-    movieName: 'Lion King',
-    startDate: '2019-01-02',
-    endDate: '2019-01-09',
-    isReturned: true
-  }
 ]
 
 
@@ -80,15 +60,21 @@ function getBorrowsError(data){
 }
 
 
-export function borrowMovie(userId,movieId){
+export function borrowMovie(userId,movieId,startDate,endDate){
+  let borrow = { userId,movieId,startDate,endDate};
   return (dispatch)=> {
     dispatch(borrowMovieBegin());
 
-    return new Promise((resolve,reject)=>{
-        resolve(JSON.stringify({result:'success'}));
+    return fetch('http://localhost:8080/Rents', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(borrow)
     })
       .then(res => {
-        return JSON.parse(res);
+        return res.json();
       })
     .then(json=>dispatch(borrowMovieSuccess(json)))
     .catch(err=>dispatch(borrowMovieError(err)))
@@ -119,15 +105,21 @@ function borrowMovieError(data){
 
 
 
-export function returnMovie(borrowId){
+export function returnMovie(borrow){
+  borrow['returned']=true;
   return (dispatch)=> {
     dispatch(returnMovieBegin());
 
-    return new Promise((resolve,reject)=>{
-        resolve(JSON.stringify({result:'success'}));
+    return fetch('http://localhost:8080/rents/'+borrow['id'], {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(borrow)
     })
       .then(res => {
-        return JSON.parse(res);
+        return res.json();
       })
     .then(json=>dispatch(returnMovieSuccess(json)))
     .catch(err=>dispatch(returnMovieError(err)))

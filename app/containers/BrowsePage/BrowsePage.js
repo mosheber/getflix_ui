@@ -23,6 +23,9 @@ import Divider from '@material-ui/core/Divider';
 import SearchIcon from '@material-ui/icons/Search';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
+import {getDateString} from 'utils/constants';
+import Modal from '@material-ui/core/Modal';
+import TextField from '@material-ui/core/TextField';
 
 const useStyles = {
   root: {
@@ -46,18 +49,26 @@ export default class BrowsePage extends React.Component {
 
   // Since state and props are static,
   // there's no need to re-render this component
+  
   constructor(props) {
     super(props);
     // Don't call this.setState() here!
+
+    let today = new Date();
+    let todayString = getDateString(today);
     this.state = {
+      movieIdToBorrow:'',
+      modalOpen:false,
       search:{
         searchText : '',
-        searchCategory: 'All'
+        searchCategory: 'All',
+        endDate:todayString,
       }
     }
     this.goToMovie = this.goToMovie.bind(this);
     this.borrowMovie = this.borrowMovie.bind(this);
     this.doSearch = this.doSearch.bind(this);
+    this.handleCloseModel=this.handleCloseModel.bind(this);
   }
 
   componentDidMount(){
@@ -83,8 +94,15 @@ export default class BrowsePage extends React.Component {
     this.props.history.push('/movie/'+id.toString());
   }
 
-  borrowMovie(movieId,movieName){
-    this.props.borrowMovie(this.props.user.user.id,movieId).then(res=>{
+  borrowMovie(){
+    let movieId = this.state.movieIdToBorrow;
+    let movieName = this.state.movieNameToBorrow;
+
+    let today = new Date();
+    let startDate = getDateString(today);
+    let endDate = this.state.search.endDate;
+
+    this.props.borrowMovie(this.props.user.user.id,movieId,startDate,endDate).then(res=>{
       if(res.type.includes('ERROR')){
         alert(res)
       }else{
@@ -93,25 +111,48 @@ export default class BrowsePage extends React.Component {
     })
   }
 
+  handleCloseModel(){
+    this.setState({
+      modalOpen:false
+    })
+  }
+
+  beginBorrow(movieId,movieName){
+    this.setState({
+      movieIdToBorrow:movieId,
+      movieNameToBorrow:movieName,
+      modalOpen:true
+    })
+  }
+
   render() {
     const classes = useStyles;
 
     return (
       <div>
-        {/* <Modal
+        <Modal
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
-          open={open}
-          onClose={handleClose}
+          open={this.state.modalOpen}
+          onClose={this.handleCloseModel}
         >
-          <div style={modalStyle} className={classes.paper}>
-            <h2 id="simple-modal-title">Text in a modal</h2>
-            <p id="simple-modal-description">
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-            </p>
-            <SimpleModal />
+          <div>
+          <TextField
+               className="animated fadeIn"
+                label="When will you return the movie?"
+                type="date"
+                onChange={(e)=>this.onChangeValue(e,'endDate')}
+                value={this.state.search.endDate}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+              <Fab onClick={this.borrowMovie} color="secondary" variant="extended">
+                      {/* <NavigationIcon className={classes.extendedIcon} /> */}
+                      Take
+                    </Fab>
           </div>
-        </Modal> */}
+        </Modal>
         <Helmet>
           <title>Browse Page</title>
           <meta
@@ -162,7 +203,7 @@ export default class BrowsePage extends React.Component {
                   actionIcon={
                     // <IconButton aria-label={`info about ${tile.name}`} className={classes.icon}>
                     // </IconButton>
-                    <Fab onClick={()=>this.borrowMovie(tile.id,tile.name)} color="secondary" variant="extended">
+                    <Fab onClick={()=>this.beginBorrow(tile.id,tile.name)} color="secondary" variant="extended">
                       {/* <NavigationIcon className={classes.extendedIcon} /> */}
                       Take
                     </Fab>

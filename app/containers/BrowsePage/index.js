@@ -21,7 +21,7 @@ function mapStateToProps(state) {
   function mapDispatchToProps(dispatch) {
     return {
       fetchMovies: (category,searchString) => dispatch(fetchMovies(category,searchString)),
-      borrowMovie: (userId,movieId) => dispatch(borrowMovie(userId,movieId))
+      borrowMovie: (userId,movieId,startDate,endDate) => dispatch(borrowMovie(userId,movieId,startDate,endDate))
     }
   }
 

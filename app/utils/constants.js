@@ -12,7 +12,7 @@ export const MAPPING_MOVIE = {
 export const MAPPING_COMMENT = {
   'text':'content',
   }
-  
+
 export const CATEGORY_MAPPING = {
   'Comedy':3,
   'Action':4,
@@ -21,6 +21,14 @@ export const CATEGORY_MAPPING = {
   'Family':7,
   'Science-Fiction':8
 }
+
+export function getDateString(today){
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var yyyy = today.getFullYear();
+  return yyyy+'-'+mm+'-'+dd;
+}
+
 
   export function apiEncode(obj,mapping){
     for (let oldKey in mapping) {

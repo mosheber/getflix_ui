@@ -84,12 +84,13 @@ export default class BorrowsPage extends React.Component {
     this.props.fetchBorrows(userName,movieName,{startDate,endDate},isReturned);
   }
 
-  returnBook(id,movieName){
-    this.props.returnMovie(id).then(res=>{
+  returnBook(row){
+    this.props.returnMovie(row).then(res=>{
       if(res.type.includes('ERROR')){
         alert('could not return book');
       }else{
-        alert(movieName+' returned!');
+        console.log('returned')
+        this.doSearch();
       }
     })
   }
@@ -206,11 +207,11 @@ export default class BorrowsPage extends React.Component {
                     <TableCell align="right">
                       { getOverdue(row.endDate) }
                     </TableCell>
-                    <TableCell align="right">{row.isReturned.toString() == 'false' ? 'No': 'Yes'}</TableCell>
+                    <TableCell align="right">{row.returned.toString() == 'false' ? 'No': 'Yes'}</TableCell>
                     <TableCell align="right">
                       {
-                        row.isReturned ? <div></div> : 
-                        <Button className="animated fadeIn" onClick = {() => this.returnBook(row.id,row.movieName)} variant="contained" color="primary">Return</Button>
+                        row.returned ? <div></div> : 
+                        <Button className="animated fadeIn" onClick = {() => this.returnBook(row)} variant="contained" color="primary">Return</Button>
                       }
                     </TableCell>
                   </TableRow>
