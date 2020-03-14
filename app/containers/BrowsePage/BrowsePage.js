@@ -74,6 +74,9 @@ export default class BrowsePage extends React.Component {
   }
 
   componentDidMount(){
+    if(!this.props.user.user.username){
+      this.props.history.push('/login');
+    }
     this.props.fetchMovies(this.state.search.searchCategory,this.state.search.searchText);
   }
 

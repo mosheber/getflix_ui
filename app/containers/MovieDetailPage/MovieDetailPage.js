@@ -29,7 +29,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
-
+import {validateObj,validateImage,validateInt,validateString} from 'utils/constants'
 
 const useStyles = {
   card: {
@@ -69,18 +69,20 @@ export default class MovieDetailPage extends React.Component {
   constructor(props) {
     super(props);
     // Don't call this.setState() here!
+    this.movieDefault = {
+      name:'some name',
+      img:'none',
+      director:'some dir',
+      description:'some desc',
+      publishDate:'2000-01-01',
+      length:'120',
+      quantity:'1',
+      categories:[],
+      id:0
+    };
     this.state = { 
-      movie:{
-        name:'some name',
-        img:'none',
-        director:'some dir',
-        description:'some desc',
-        publishDate:'2000-01-01',
-        length:'120',
-        quantity:'1',
-        categories:[],
-        id:0
-      },
+      showComments:false,
+      movie:this.movieDefault,
       mainValues:{
         addCategory:'All',
         comment:'',
@@ -88,6 +90,11 @@ export default class MovieDetailPage extends React.Component {
       }
       //editable: false
     };
+    this.validateFields = [ 
+      validateImage('img'),validateString('director'),validateString('name'),
+      validateString('description'),validateString('publishDate'),
+      validateInt('length'),validateInt('quantity')
+    ];
     this.onDrop = this.onDrop.bind(this);
     this.onRemoveCategory = this.onRemoveCategory.bind(this)
     this.onAddCategory = this.onAddCategory.bind(this);
@@ -98,7 +105,13 @@ export default class MovieDetailPage extends React.Component {
   }
 
   save(){
-    var isCreate = !this.state.movie.hasOwnProperty('id');
+    let validResult = validateObj(this.state.movie,this.validateFields);
+    if(!validResult['succeeded']){
+      alert(validResult['message']);
+      return;
+    }
+
+    var isCreate = this.state.movie['id'].toString()=='0';
     
     this.props.manageMovie(this.state.movie).then(res=>{
       let messageAlert = ""
@@ -130,13 +143,17 @@ export default class MovieDetailPage extends React.Component {
   }
 
   componentDidMount(){
+    if(!this.props.user.user.username){
+      this.props.history.push('/login');
+    }
     let pathname = this.props.history.location.pathname;
     let movieId = pathname.split('/').pop() ;
 
     if(movieId.toString()=='0'){
       console.log('create movie');
       this.setState({
-        movie:this.state.movie
+        movie:this.state.movie,
+        showComments:false
       })
       this.props.currentMovie.comments = []
     }else{
@@ -149,7 +166,8 @@ export default class MovieDetailPage extends React.Component {
         
         if(res.type.includes('SUCCESS')){
           this.setState({
-            movie:this.props.currentMovie.movie
+            movie:this.props.currentMovie.movie,
+            showComments:true
           })
           this.props.fetchComments(this.props.currentMovie.movie.id);
         }else{
@@ -158,6 +176,20 @@ export default class MovieDetailPage extends React.Component {
       })
     }
     
+  }
+
+  componentWillReceiveProps(){
+    let pathname = this.props.history.location.pathname;
+    let movieId = pathname.split('/').pop() ;
+
+    if(movieId.toString()=='0'){
+      console.log('create movie');
+      this.setState({
+        movie:this.movieDefault,
+        showComments:false
+      })
+      this.props.currentMovie.comments = []
+    }
   }
 
   onRemoveCategory(cat){
@@ -329,58 +361,71 @@ export default class MovieDetailPage extends React.Component {
             </CardActions>
           </Card>
           </div>
-          <div style={{display:'flex'}}>     
+          {
+            this.state.showComments ? <div style={{display:'flex'}}>     
               
-              <List className={classes.root}>
-                  <ListItem>
-                      <TextField
-                      className="animated fadeIn"
-                        label="Enter Comment"
-                        defaultValue={this.state.mainValues.comment}
-                        onChange={(e)=>this.onChangeMainValue(e,'comment')}
-                      />
-                      <Rating
-                        name="simple-controlled"
-                        value={this.state.mainValues.rating}
-                        onChange={(e)=>this.onChangeMainValue(e,'rating')}
-                      />
-                    <Button onClick={this.onAddComment} color='primary'>Post</Button>
+            <List className={classes.root}>
+                <ListItem>
+                    <TextField
+                    className="animated fadeIn"
+                      label="Enter Comment"
+                      defaultValue={this.state.mainValues.comment}
+                      onChange={(e)=>this.onChangeMainValue(e,'comment')}
+                      multiline
+                      style={{width:300}}
+                    />
                   </ListItem>
-                  {
-                    this.props.currentMovie.comments ? this.props.currentMovie.comments.map(com => 
-                      (
-                        <div>
-                            <ListItem alignItems="flex-start">
-                              <ListItemAvatar>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                              </ListItemAvatar>
-                              <ListItemText
-                                primary={com.userId}
-                                secondary={
-                                  <React.Fragment>
-                                    <Typography
-                                      component="span"
-                                      variant="body2"
-                                      color="textPrimary"
-                                    >
-                                      {com.text}
-                                    </Typography>
-                                    <Rating
-                                      name="simple-controlled"
-                                      value={com.grade}
-                                      readOnly
-                                    />
+                  <ListItem>
+                    <Rating
+                      name="simple-controlled"
+                      value={this.state.mainValues.rating}
+                      onChange={(e)=>this.onChangeMainValue(e,'rating')}
+                    />
+                  <Button onClick={this.onAddComment} color='primary'>Post</Button>
+                </ListItem>
+                <Divider variant="inset" component="div" />
+                <Divider variant="inset" component="div" />
+                {
+                  this.props.currentMovie.comments ? this.props.currentMovie.comments.map(com => 
+                    (
+                      <div>
+                          <ListItem alignItems="flex-start">
+                            <ListItemAvatar>
+                              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                            </ListItemAvatar>
+                            <ListItemText
+                              primary={com.userId}
+                              secondary={
+                                <React.Fragment>
+                                <Typography
+                                    component="span"
+                                    variant="body2"
+                                    color="textPrimary"
+                                  >
+                                    {com.text}
+                                  </Typography>
                                   </React.Fragment>
-                                }
-                              />
+                              }
+                            />
                             </ListItem>
-                            <Divider variant="inset" component="li" />
-                        </div>                  
-                      )
-                      ) : null
-                  }
-              </List>
-          </div>
+                            <ListItem>
+                            <React.Fragment>
+                                  <Rating
+                                    name="simple-controlled"
+                                    value={com.grade}
+                                    readOnly
+                                  />
+                                </React.Fragment>
+                          </ListItem>
+                          <Divider variant="inset" component="li" />
+                      </div>                  
+                    )
+                    ) : null
+                }
+            </List>
+        </div> : null
+          }
+          
       </Paper>
     );
   }

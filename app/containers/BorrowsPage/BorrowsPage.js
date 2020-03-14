@@ -71,6 +71,9 @@ export default class BorrowsPage extends React.Component {
   }
 
   componentDidMount(){
+    if(!this.props.user.user.username){
+      this.props.history.push('/login');
+    }
     this.doSearch();
   }
 

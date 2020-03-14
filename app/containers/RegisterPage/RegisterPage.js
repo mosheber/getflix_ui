@@ -143,10 +143,6 @@ export default class RegisterPage extends React.Component {
   
   }
 
-  validatePassword(text){
-    return /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(text);
-  }
-
 
   render() {
     const classes = useStyles;

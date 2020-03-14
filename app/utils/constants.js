@@ -47,4 +47,32 @@ export function getDateString(today){
     }
     return obj;
   }
-  
+
+export function validateObj(obj,fields){
+  for(let i=0;i<fields.length;i++){
+    let field = fields[i];
+    if(!(field['name'] in obj)){
+      return {'succeeded':false,'message':`Field ${field['name']} is missing. Please fill it.`};
+    }
+    if(!field['check'](obj[field['name']])){
+      return {'succeeded':false,'message':`Field ${field['name']} is invalid: ${field['validMessage']}`};
+    }
+  }
+  return {'succeeded':true,'message':'success'};
+}
+
+export function validateString(key){
+  return { 'name':key, 'check': x=>x!='','validMessage':'Needs to be not empty.'};
+}
+
+export function validateInt(key){
+  return { 'name':key, 'check': x=>/^\+?(0|[1-9]\d*)$/.test(x),'validMessage':'Needs positive number.'};
+}
+
+export function validateImage(key){
+  return { 'name':key, 'check': x=>x.includes('data'),'validMessage':'Needs valid image'};
+}
+
+export function validatePassword(key){
+  return { 'name':key, 'check': x=>/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(x),'validMessage':'Needs valid image'};
+}
