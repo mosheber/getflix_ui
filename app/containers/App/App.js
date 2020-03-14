@@ -26,10 +26,10 @@ import './style.scss';
 const App = () => (
   <div className="app-wrapper">
     <Helmet
-      titleTemplate="%s - React.js Boilerplate"
-      defaultTitle="React.js Boilerplate"
+      titleTemplate="%s - Getflix"
+      defaultTitle="Getflix"
     >
-      <meta name="description" content="A React.js Boilerplate application" />
+      <meta name="description" content="Getflix" />
     </Helmet>
     <Header />
     <Switch>

@@ -169,7 +169,7 @@ export default class BrowsePage extends React.Component {
           <title>Browse Page</title>
           <meta
             name="description"
-            content="Feature page of React.js Boilerplate application"
+            content="Feature page of Getflix application"
           />
         </Helmet>
         <div className={classes.root}>

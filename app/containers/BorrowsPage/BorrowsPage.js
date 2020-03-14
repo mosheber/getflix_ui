@@ -114,13 +114,17 @@ export default class BorrowsPage extends React.Component {
       <div>
         <AppBar position="static" color="white">
             <Toolbar>
-            
+
+
+            {
+              this.props.user.user.isAdmin ? 
               <InputBase
                 placeholder="Search Users..."
                 defaultValue={this.state.search.userName}
                 onChange={(e)=>this.onChangeValue(e,'userName')}
-              />
-              
+              /> : null
+            }
+                          
               <InputBase
                 placeholder="Search Movies..."
                 defaultValue={this.state.search.movieName}

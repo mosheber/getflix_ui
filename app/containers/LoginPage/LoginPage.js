@@ -77,7 +77,7 @@ export default class LoginPage extends React.Component {
           <title>Login Page</title>
           <meta
             name="description"
-            content="Feature page of React.js Boilerplate application"
+            content="Feature page of Getflix application"
           />
         </Helmet>
         <Card>
