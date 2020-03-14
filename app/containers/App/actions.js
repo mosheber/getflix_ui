@@ -63,6 +63,7 @@ export function repoLoadingError(error) {
 }
 
 
+import {apiEncode,MAPPING_USER} from 'utils/constants'
 
 export function fetchUser(username,password){
   return (dispatch)=> {
@@ -122,14 +123,22 @@ const def_user = {
 
 
 export function createUser(user){
+  delete user['passwordRepeated'];
+
+  let userReady = apiEncode(user,MAPPING_USER);
   return (dispatch)=> {
     dispatch(createUserStart());
 
-    return new Promise((resolve,reject)=>{
-        resolve(JSON.stringify(user));
+    return fetch('http://localhost:8080/Users', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(userReady)
     })
       .then(res => {
-        return JSON.parse(res);
+        return res.json();
       })
     .then(json=>dispatch(createUserSuccess(json)))
     .catch(err=>dispatch(createUserError(err)))

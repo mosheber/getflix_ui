@@ -71,13 +71,13 @@ export default class RegisterPage extends React.Component {
     
     this.state = { 
       user:{
-        img:'none',
+        // img:'none',
         username:"none",
-        firstname:'none',
-        lastname:'none',
+        // firstname:'none',
+        // lastname:'none',
         password:"none",
         passwordRepeated:"none",
-        birthDate:'2000-01-01',
+        // birthDate:'2000-01-01',
         isAdmin:false
       }
     };
@@ -112,6 +112,10 @@ export default class RegisterPage extends React.Component {
   }
 
   register(){
+    if(this.state.user.password != this.state.user.passwordRepeated){
+      alert('Passwords do not match. Please Re-enter.')
+      return;
+    }
     this.props.createUser(this.state.user)
     .then(res => {
       if(res.data){
@@ -139,13 +143,18 @@ export default class RegisterPage extends React.Component {
   
   }
 
+  validatePassword(text){
+    return /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(text);
+  }
+
+
   render() {
     const classes = useStyles;
     //} />
     return (
       <Paper style={{display:'flex'}} elevation={3} >
           <div style={{display:'flex',flexDirection:'column'}}>
-            {
+            {/* {
               this.state.user.img == 'none' ? 
               null
               : <img src={this.state.user.img} style={{width:300,height:500}} />
@@ -157,7 +166,7 @@ export default class RegisterPage extends React.Component {
                 onChange={this.onDrop}
                 imgExtension={['.jpg', '.gif', '.png', '.gif']}
                 //maxFileSize={5242880}
-              />
+              /> */}
           </div>
           <div style={{display:'flex',flexDirection:'column'}}>
           <Card style={{width:500}}>
@@ -167,15 +176,15 @@ export default class RegisterPage extends React.Component {
                className="animated fadeIn"
                 label="Username"
                 onChange={(e)=>this.onChangeValue(e,'username')}
-                defaultValue={this.state.user.username}
+                value={this.state.user.username}
               />
 
-              <div style={{padding:30}}></div>
+              {/* <div style={{padding:30}}></div>
               <TextField
                className="animated fadeIn"
                 label="First Name"
                 onChange={(e)=>this.onChangeValue(e,'firstname')}
-                defaultValue={this.state.user.firstname}
+                value={this.state.user.firstname}
               />
 
 
@@ -184,8 +193,8 @@ export default class RegisterPage extends React.Component {
                className="animated fadeIn"
                 label="Last Name"
                 onChange={(e)=>this.onChangeValue(e,'lastname')}
-                defaultValue={this.state.user.lastname}
-              />
+                value={this.state.user.lastname}
+              /> */}
 
 
               <div style={{padding:30}}></div>
@@ -193,7 +202,7 @@ export default class RegisterPage extends React.Component {
                className="animated fadeIn"
                 label="Password"
                 onChange={(e)=>this.onChangeValue(e,'password')}
-                defaultValue={this.state.user.password}
+                value={this.state.user.password}
               />
 
 
@@ -202,21 +211,21 @@ export default class RegisterPage extends React.Component {
                className="animated fadeIn"
                 label="Repeat Password"
                 onChange={(e)=>this.onChangeValue(e,'passwordRepeated')}
-                defaultValue={this.state.user.passwordRepeated}
+                value={this.state.user.passwordRepeated}
               />
 
-
+{/* 
               <div style={{padding:10}}></div>
               <TextField
                className="animated fadeIn"
                 label="Birth Date"
                 type="date"
                 onChange={(e)=>this.onChangeValue(e,'birthDate')}
-                defaultValue={this.state.user.birthDate}
+                value={this.state.user.birthDate}
                 InputLabelProps={{
                   shrink: true,
                 }}
-              />          
+              />           */}
               <div>
                 <Typography color="textSecondary" gutterBottom>
                   Is Admin?

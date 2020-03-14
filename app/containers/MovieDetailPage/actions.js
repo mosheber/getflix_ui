@@ -66,6 +66,7 @@ function getSomeMovie(id){
       'Content-Type': 'application/json'
     },
   })
+  .then(res=>res.json())
 }
 
 export function fetchMovie(id){
@@ -73,7 +74,6 @@ export function fetchMovie(id){
     dispatch(getMovie());
     let movieToGet = id.toString() == '0' ? getDefMovie() : getSomeMovie(id);
     return movieToGet
-    .then(res=>res.json())
     .then(json=>{
       let a=3;
       return dispatch(getMovieSuccess(json))

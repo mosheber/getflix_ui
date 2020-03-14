@@ -11,10 +11,6 @@ function evalState(actions,action,state){
 
 const initialState={
     user:{
-        id:1,
-        username:'moshe',
-        password:'password',
-        isAdmin:true
     },
     errorMessage:'',
     registerErrorMessage:''
@@ -40,7 +36,8 @@ export default function userReducer(state=initialState,action){
         return {
           ...state,
           isFetching:false,
-          errorMessage:action.data.message
+          errorMessage:action.data.message,
+          user:{}
         }
       },
       'CREATING_USER':()=>{
@@ -50,10 +47,11 @@ export default function userReducer(state=initialState,action){
         }
       },
       'CREATING_USER_SUCCESS':()=>{
+        let user = apiDecode(action.data,MAPPING_USER);
         return {
           ...state,
           isCreating:false,
-          user:action.data
+        user:user
         }
       },
       'CREATING_USER_ERROR':()=>{

@@ -24,29 +24,37 @@ export default class Header extends React.Component { // eslint-disable-line rea
     // Don't call this.setState() here!
 //    this.goTo=this.goTo.bind(this);  
     this.cleanMovie = this.cleanMovie.bind(this);
+    this.logOut = this.logOut.bind(this);
   }
 
   cleanMovie(){
     this.props.fetchMovie('0');
   }
+
+  logOut(){
+    this.props.fetchUser(0); //null the current user
+  }
+
   render() {
     return (
         <div style={classes.root}>
-          
           <AppBar position="static" color="white">
-            <Toolbar>
+              {
+                this.props.user.user.username ? 
+                <Toolbar>
               <Link className="router-link" to="/browse">
                   <img src={Banner} alt="getflix" width="40%"/>
-              </Link> 
-              <Typography variant="h6" style={classes.title}>
+              </Link>
+                  <Typography variant="h6" style={classes.title}>
                 Hello {this.props.user.user.username}!
-              </Typography>
+              </Typography> 
+
               <Typography variant="h6" style={classes.title}>
                 <Link className="router-link" to="/browse">
                   Browse Catalog            
                 </Link>
               </Typography>
-              <Typography variant="h6" style={classes.title}>
+              <Typography onClick={this.cleanMovie} variant="h6" style={classes.title}>
                 <Link className="router-link" to="/movie/0">
                   Add a Movie
                 </Link>
@@ -56,7 +64,13 @@ export default class Header extends React.Component { // eslint-disable-line rea
                   My Borrows
                 </Link>
               </Typography>
-            </Toolbar>
+              <Typography onClick={this.logOut} variant="h6" style={classes.title}>
+                <Link className="router-link" to='/login'>
+                  Log out
+                </Link>
+              </Typography>
+              </Toolbar> : null
+              }
           </AppBar>
         </div>
     );

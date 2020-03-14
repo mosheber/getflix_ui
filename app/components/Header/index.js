@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import injectReducer from 'utils/injectReducer';
 import { fetchMovie } from '../../containers/MovieDetailPage/actions';
+import { fetchUser } from '../../containers/App/actions';
 import reducer from '../../containers/App/userReducer';
 // import saga from './saga';
 import Header from './Header'
@@ -16,7 +17,8 @@ function mapStateToProps(state) {
   
   function mapDispatchToProps(dispatch) {
     return {
-      fetchMovie: (id) => dispatch(fetchMovie(id))
+      fetchMovie: (id) => dispatch(fetchMovie(id)),
+      fetchUser: (id) => dispatch(fetchUser(id))
     }
   }
 

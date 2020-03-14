@@ -36,14 +36,15 @@ export default function MovieReducer(state=initialState,action){
       return {
         ...state,
         isFetching:false,
-        movie:action.data
+        movie:movieReady
       }
     },
     'FETCHING_Movie_ERROR':()=>{
       return {
         ...state,
         isFetching:false,
-        error:true
+        error:true,
+        movie:{}
       }
     },
     'FETCHING_Comments':()=>{
