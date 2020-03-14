@@ -30,7 +30,6 @@ export default class LoginPage extends React.Component {
      };
     this.login = this.login.bind(this);
     this.onChangeValue = this.onChangeValue.bind(this);
-    this.validatePassword=this.validatePassword.bind(this);
     this.register=this.register.bind(this);
   }
 
@@ -51,19 +50,7 @@ export default class LoginPage extends React.Component {
         }
       }
     })
-    // if(!this.validatePassword(this.state.password)){
-    //   console.log('pass invalid')
-    //   this.setState({
-    //     passwordError:true,
-    //     passwordErrorMessage: 'Invalid Password. It needs to have 8 characters, One Uppercase, One lowercase.'
-    //   });
-    // } else {
-      
-    // }
-  }
-
-  validatePassword(text){
-    return /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(text);
+    
   }
 
   onChangeValue(e,key) {
@@ -75,7 +62,6 @@ export default class LoginPage extends React.Component {
     if(key == 'password'){
       this.setState({
         password:e.target.value,
-        passwordError: !this.validatePassword(e.target.value)
       });
     }
   }
@@ -111,6 +97,7 @@ export default class LoginPage extends React.Component {
                   Password
                 </Typography>
                 <TextField
+                type='password'
                 onChange={(e)=>this.onChangeValue(e,'password')} variant="filled" id="standard-error" />
               </div>
               {

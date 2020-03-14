@@ -54,7 +54,7 @@ export function validateObj(obj,fields){
     if(!(field['name'] in obj)){
       return {'succeeded':false,'message':`Field ${field['name']} is missing. Please fill it.`};
     }
-    if(!field['check'](obj[field['name']])){
+    if(!field['check'](obj[field['name']],obj)){
       return {'succeeded':false,'message':`Field ${field['name']} is invalid: ${field['validMessage']}`};
     }
   }
@@ -62,17 +62,21 @@ export function validateObj(obj,fields){
 }
 
 export function validateString(key){
-  return { 'name':key, 'check': x=>x!='','validMessage':'Needs to be not empty.'};
+  return { 'name':key, 'check': (x,obj)=>x!='','validMessage':'Needs to be not empty.'};
 }
 
 export function validateInt(key){
-  return { 'name':key, 'check': x=>/^\+?(0|[1-9]\d*)$/.test(x),'validMessage':'Needs positive number.'};
+  return { 'name':key, 'check': (x,obj)=>/^\+?(0|[1-9]\d*)$/.test(x),'validMessage':'Needs positive number.'};
 }
 
 export function validateImage(key){
-  return { 'name':key, 'check': x=>x.includes('data'),'validMessage':'Needs valid image'};
+  return { 'name':key, 'check': (x,obj)=>x.includes('data'),'validMessage':'Needs valid image'};
 }
 
 export function validatePassword(key){
-  return { 'name':key, 'check': x=>/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(x),'validMessage':'Needs valid image'};
+  return { 'name':key, 'check': (x,obj)=>/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(x),
+  'validMessage':'Password needs to contain at least one lowercase letter, one uppercase, and one number.'};
+}
+export function validatePasswordRepeat(key){
+  return { 'name':key, 'check': (x,obj)=>x==obj['password'],'validMessage':'Passwords must match'};
 }

@@ -182,7 +182,7 @@ export default class BrowsePage extends React.Component {
                 defaultValue={this.state.search.searchText}
                 onChange={(e)=>this.onChangeValue(e,'searchText')}
               />
-              
+            Category :         
             <Select
               value={this.state.search.searchCategory}
               onChange={(e)=>this.onChangeValue(e,'searchCategory')}

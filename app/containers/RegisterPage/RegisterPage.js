@@ -28,7 +28,7 @@ import Divider from '@material-ui/core/Divider';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Switch from '@material-ui/core/Switch';
-
+import {validateObj,validateString,validatePassword,validatePasswordRepeat} from 'utils/constants'
 
 const useStyles = {
   card: {
@@ -81,6 +81,11 @@ export default class RegisterPage extends React.Component {
         isAdmin:false
       }
     };
+    this.validateFields = [
+      validateString('username'),
+      validatePassword('password'),
+      validatePasswordRepeat('passwordRepeated')
+    ];
     this.onDrop = this.onDrop.bind(this);
     this.onRemoveCategory = this.onRemoveCategory.bind(this)
     this.register = this.register.bind(this);
@@ -112,10 +117,12 @@ export default class RegisterPage extends React.Component {
   }
 
   register(){
-    if(this.state.user.password != this.state.user.passwordRepeated){
-      alert('Passwords do not match. Please Re-enter.')
+    let validResult = validateObj(this.state.user,this.validateFields);
+    if(!validResult['succeeded']){
+      alert(validResult['message']);
       return;
     }
+    
     this.props.createUser(this.state.user)
     .then(res => {
       if(res.data){
@@ -197,6 +204,7 @@ export default class RegisterPage extends React.Component {
               <TextField
                className="animated fadeIn"
                 label="Password"
+                type="password"
                 onChange={(e)=>this.onChangeValue(e,'password')}
                 value={this.state.user.password}
               />
@@ -206,6 +214,7 @@ export default class RegisterPage extends React.Component {
               <TextField
                className="animated fadeIn"
                 label="Repeat Password"
+                type="password"
                 onChange={(e)=>this.onChangeValue(e,'passwordRepeated')}
                 value={this.state.user.passwordRepeated}
               />
