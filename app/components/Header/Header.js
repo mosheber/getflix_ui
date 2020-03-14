@@ -64,6 +64,14 @@ export default class Header extends React.Component { // eslint-disable-line rea
                   My Borrows
                 </Link>
               </Typography>
+              {
+                this.props.user.user.isAdmin ? 
+                <Typography variant="h6" style={classes.title}>
+                <Link className="router-link" to="/category">
+                  Categories
+                </Link>
+              </Typography> : null
+              }
               <Typography onClick={this.logOut} variant="h6" style={classes.title}>
                 <Link className="router-link" to='/login'>
                   Log out

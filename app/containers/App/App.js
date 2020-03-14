@@ -17,6 +17,7 @@ import BrowsePage from 'containers/BrowsePage/Loadable';
 import MovieDetailPage from 'containers/MovieDetailPage/Loadable';
 import BorrowsPage from 'containers/BorrowsPage/Loadable';
 import RegisterPage from 'containers/RegisterPage/Loadable';
+import CategoryPage from 'containers/CategoryPage/Loadable';
 
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import Header from 'components/Header/Loadable';
@@ -41,6 +42,7 @@ const App = () => (
       <Route path="/borrows" component={BorrowsPage} />
       <Route path="/register" component={RegisterPage} />
       <Route path="/header" component={Header} />
+      <Route path="/category" component={CategoryPage} />
       <Route path="" component={LoginPage} />
     </Switch>
     <Footer />

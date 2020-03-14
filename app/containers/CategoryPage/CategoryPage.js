@@ -26,10 +26,14 @@ import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import {validateObj,validateString} from 'utils/constants'
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fab from '@material-ui/core/Fab';
 
 const useStyles = {
   table: {
-    minWidth: 650,
+    // minWidth: 200,
+    maxWidth: 100,
   },
 };
 
@@ -42,17 +46,26 @@ export default class CategoryPage extends React.Component {
   constructor(props) {
     super(props);
     // Don't call this.setState() here!
-    var today = new Date();
-    var todayString = getDateString(today);
     this.state = {
-      categoryToEdit:{},
+      modalOpen:false,
+      categoryToEdit:{
+        name:''
+      },
       category:{
         name:''
       }
     }
+    this.onChangeValue = this.onChangeValue.bind(this);
+    this.onChangeValueEdit = this.onChangeValueEdit.bind(this);
+    this.addCategory = this.addCategory.bind(this);
+    this.editCategoryBegin = this.editCategoryBegin.bind(this);
+    this.editCategoryFinish = this.editCategoryFinish.bind(this);
   }
 
   componentDidMount(){
+    if(!this.props.user.user.username){
+      this.props.history.push('/login');
+    }
     this.props.fetchCategories();
   }
 
@@ -62,6 +75,16 @@ export default class CategoryPage extends React.Component {
     
     this.setState({
       category:obj
+    });
+  }
+
+
+  onChangeValueEdit(e,key,e_field='value') {
+    var obj = this.state.categoryToEdit;
+    obj[key] = e.target[e_field];
+    
+    this.setState({
+      categoryToEdit:obj
     });
   }
 
@@ -79,11 +102,68 @@ export default class CategoryPage extends React.Component {
     })
   }
 
+  editCategoryBegin(category){
+    this.setState({
+      categoryToEdit:category,
+      modalOpen:true
+    })
+  }
+
+  editCategoryFinish(editCategoryFinish){
+    this.props.manageCategory(this.state.categoryToEdit).then(res=>{
+      let messageAlert = ""
+      if(res.type.includes('ERROR')){
+        messageAlert = 'Error: '+ res.toString();
+        alert(messageAlert);
+      }else{
+        this.props.fetchCategories();
+        this.setState({
+          modalOpen:false
+        })
+      }
+      
+    })
+  }
+
+  handleCloseModel(){
+    this.setState({
+      modalOpen:false
+    })
+  }
+
   render() {
     const classes = useStyles;
     
     return (
       <div>
+        <Modal
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+          open={this.state.modalOpen}
+          onClose={this.handleCloseModel}
+          BackdropComponent={Backdrop}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <div style={{backgroundColor:'white',paddingTop:'30px',paddingLeft:'30px',paddingRight:'30px',paddingBottom:'30px'}}>
+            <h3>Enter new name:</h3>
+            <TextField
+                className="animated fadeIn"
+                  onChange={(e)=>this.onChangeValueEdit(e,'name')}
+                  value={this.state.categoryToEdit.name}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+                <Fab onClick={this.editCategoryFinish} color="secondary" variant="extended">
+                        {/* <NavigationIcon className={classes.extendedIcon} /> */}
+                        Edit
+                      </Fab>
+          </div>
+        </Modal>
         <AppBar position="static" color="white">
             <Toolbar>
 
@@ -110,42 +190,19 @@ export default class CategoryPage extends React.Component {
               <TableHead>
                 <TableRow>
                   <TableCell>Id</TableCell>
-                  {
-                    this.props.user.user.isAdmin ? 
-                    <TableCell align="right">User Name</TableCell> : 
-                    null
-                  }
-                  <TableCell align="right">Movie Name</TableCell>
-                  <TableCell align="right">Start Date</TableCell>
-                  <TableCell align="right">End Date</TableCell>
-                  <TableCell align="right">Days Overdue</TableCell>
-                  <TableCell align="right">Is Returned?</TableCell>
-                  <TableCell align="right">Actions</TableCell>
+                  <TableCell align="left">Name</TableCell>
+                  <TableCell align="left">Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {this.props.borrows.borrows.map(row => (
+                {this.props.categories.categories.map(row => (
                   <TableRow key={row.id}>
-                    <TableCell component="th" scope="row">
-                      {row.id}
-                    </TableCell>
-                    {
-                      this.props.user.user.isAdmin ? 
-                      <TableCell align="right">{row.userId}</TableCell> :
-                      null
-                    }
-                    <TableCell align="right">{row.movieId}</TableCell>
-                    <TableCell align="right">{row.startDate}</TableCell>
-                    <TableCell align="right">{row.endDate}</TableCell>
-                    <TableCell align="right">
-                      { getOverdue(row.endDate) }
-                    </TableCell>
-                    <TableCell align="right">{row.returned.toString() == 'false' ? 'No': 'Yes'}</TableCell>
-                    <TableCell align="right">
-                      {
-                        row.returned ? <div></div> : 
-                        <Button className="animated fadeIn" onClick = {() => this.returnBook(row)} variant="contained" color="primary">Return</Button>
-                      }
+                    <TableCell component="th" scope="row">{row.id}</TableCell>
+                    <TableCell align="left">{row.name}</TableCell>
+                    <TableCell align="left">
+                    <Button className="animated fadeIn" onClick = {() => this.editCategoryBegin(row)} variant="contained" color="primary">
+                      Edit
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
