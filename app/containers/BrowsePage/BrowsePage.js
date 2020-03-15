@@ -27,7 +27,7 @@ import {getDateString} from 'utils/constants';
 import Modal from '@material-ui/core/Modal';
 import TextField from '@material-ui/core/TextField';
 import Backdrop from '@material-ui/core/Backdrop';
-
+import {checkUserGeneral} from 'utils/constants';
 
 const useStyles = {
   root: {
@@ -74,10 +74,13 @@ export default class BrowsePage extends React.Component {
   }
 
   componentDidMount(){
-    if(!this.props.user.user.username){
+    if(!checkUserGeneral()){
       this.props.history.push('/login');
     }
-    this.props.fetchMovies(this.state.search.searchCategory,this.state.search.searchText);
+    this.props.fetchCategories().then(res=>{
+      this.props.fetchMovies(this.state.search.searchCategory,this.state.search.searchText);
+    });
+    
   }
 
 
@@ -188,12 +191,13 @@ export default class BrowsePage extends React.Component {
               onChange={(e)=>this.onChangeValue(e,'searchCategory')}
             >
               <MenuItem value={'All'}>All</MenuItem>
-              <MenuItem value={'Comedy'}>Comedy</MenuItem>
-              <MenuItem value={'Drama'}>Drama</MenuItem>
-              <MenuItem value={'Action'}>Action</MenuItem>
-              <MenuItem value={'Thriller'}>Thriller</MenuItem>
-              <MenuItem value={'Family'}>Family</MenuItem>
-              <MenuItem value={'Science-Fiction'}>Science-Fiction</MenuItem>
+              {
+                this.props.categories && this.props.categories.categories ? this.props.categories.categories.map(row=>{
+                  return (
+                    <MenuItem value={row.id}>{row.name}</MenuItem>
+                  )
+                }) : null
+              }
             </Select>
 
               <Button onClick = {() => this.doSearch()} color="primary">

@@ -33,10 +33,9 @@ export default class LoginPage extends React.Component {
     this.register=this.register.bind(this);
   }
 
-  shouldComponentUpdate() {
-    return false;
+  componentDidMount(){
+    this.props.fetchCategories();
   }
-
 
   login() {
     console.log('attempt login')

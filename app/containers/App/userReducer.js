@@ -1,4 +1,4 @@
-import {apiDecode,MAPPING_USER} from 'utils/constants'
+import {apiDecode,MAPPING_USER,USER_LOCAL_KEY} from 'utils/constants'
 
 function evalState(actions,action,state){
     if(Object.keys(actions).indexOf(action.type)>-1){
@@ -16,6 +16,15 @@ const initialState={
     registerErrorMessage:''
 } 
 
+function saveLocal(user){
+  delete user['password'];
+  localStorage.setItem(USER_LOCAL_KEY,JSON.stringify(user));
+}
+
+function deleteUserLocal(){
+  localStorage.removeItem(USER_LOCAL_KEY);
+}
+
 export default function userReducer(state=initialState,action){
     const actions={
       'FETCHING_USER':()=>{
@@ -26,6 +35,7 @@ export default function userReducer(state=initialState,action){
       },
       'FETCHING_USER_SUCCESS':()=>{
         let user = apiDecode(action.data,MAPPING_USER);
+        saveLocal(user);
         return {
           ...state,
           isFetching:false,
@@ -48,6 +58,7 @@ export default function userReducer(state=initialState,action){
       },
       'CREATING_USER_SUCCESS':()=>{
         let user = apiDecode(action.data,MAPPING_USER);
+        saveLocal(user);
         return {
           ...state,
           isCreating:false,
@@ -59,6 +70,19 @@ export default function userReducer(state=initialState,action){
           ...state,
           isCreating:false,
           registerErrorMessage:action.data.message
+        }
+      },
+      'LOGOUT_USER':()=>{
+        deleteUserLocal()
+        return {
+          ...state,
+          user:{}
+        }
+      },
+      'SET_LOCAL_USER':()=>{
+        return {
+          ...state,
+          user:action.user
         }
       }
     }

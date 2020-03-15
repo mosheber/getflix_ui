@@ -29,7 +29,7 @@ import {validateObj,validateString} from 'utils/constants'
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fab from '@material-ui/core/Fab';
-
+import {checkUserGeneral} from 'utils/constants';
 const useStyles = {
   table: {
     // minWidth: 200,
@@ -63,7 +63,7 @@ export default class CategoryPage extends React.Component {
   }
 
   componentDidMount(){
-    if(!this.props.user.user.username){
+    if(!checkUserGeneral()){
       this.props.history.push('/login');
     }
     this.props.fetchCategories();

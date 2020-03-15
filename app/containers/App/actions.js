@@ -146,6 +146,7 @@ export function createUser(user){
 }
 
 
+
 function createUserStart(){
   return {
     type:'CREATING_USER'
@@ -164,5 +165,33 @@ function createUserError(data){
   return {
     type:'CREATING_USER_ERROR',
     data
+  }
+}
+
+export function logOutUser(){
+  
+  return (dispatch)=> {
+    dispatch({
+      type:'LOGOUT_USER',
+    });
+
+    return new Promise((resolve,reject)=>{
+      resolve({logout:'logout'});
+    })
+  }
+}
+
+
+export function setLocalUser(user){
+  
+  return (dispatch)=> {
+    dispatch({
+      type:'SET_LOCAL_USER',
+      user
+    });
+
+    return new Promise((resolve,reject)=>{
+      resolve({user:user});
+    })
   }
 }

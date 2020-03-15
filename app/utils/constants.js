@@ -1,6 +1,7 @@
 export const RESTART_ON_REMOUNT = '@@saga-injector/restart-on-remount';
 export const DAEMON = '@@saga-injector/daemon';
 export const ONCE_TILL_UNMOUNT = '@@saga-injector/once-till-unmount';
+export const USER_LOCAL_KEY = 'getflixUser';
 export const MAPPING_USER = {
 'username':'name',
 'isAdmin':'admin'
@@ -13,14 +14,6 @@ export const MAPPING_COMMENT = {
   'text':'content',
   }
 
-export const CATEGORY_MAPPING = {
-  'Comedy':3,
-  'Action':4,
-  'Drama':5,
-  'Thriller':6,
-  'Family':7,
-  'Science-Fiction':8
-}
 
 export function getDateString(today){
   var dd = String(today.getDate()).padStart(2, '0');
@@ -46,6 +39,25 @@ export function getDateString(today){
       delete obj[newKey];
     }
     return obj;
+  }
+
+  export function checkUserLocal(props){
+    let user = localStorage.getItem(USER_LOCAL_KEY);
+    if(user){
+      let userObj = JSON.parse(user);
+      return props.setLocalUser(userObj);
+    }else{
+      return null;
+    }
+  }
+
+  export function checkUserGeneral(){
+    let user = localStorage.getItem(USER_LOCAL_KEY);
+    if(user){
+      return true;
+    }else{
+      return false;
+    }
   }
 
 export function validateObj(obj,fields){

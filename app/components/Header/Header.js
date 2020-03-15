@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import {checkUserLocal} from 'utils/constants';
 import './style.scss';
 
 const classes = {
@@ -27,12 +28,16 @@ export default class Header extends React.Component { // eslint-disable-line rea
     this.logOut = this.logOut.bind(this);
   }
 
+  componentWillMount(){
+    checkUserLocal(this.props);
+  }
+
   cleanMovie(){
     this.props.fetchMovie('0');
   }
 
   logOut(){
-    this.props.fetchUser(0); //null the current user
+    this.props.logOutUser(); 
   }
 
   render() {
@@ -54,8 +59,8 @@ export default class Header extends React.Component { // eslint-disable-line rea
                   Browse Catalog            
                 </Link>
               </Typography>
-              <Typography onClick={this.cleanMovie} variant="h6" style={classes.title}>
-                <Link className="router-link" to="/movie/0">
+              <Typography  variant="h6" style={classes.title}>
+                <Link className="router-link" to="/movie/0" onClick={this.cleanMovie}>
                   Add a Movie
                 </Link>
               </Typography>
@@ -72,8 +77,8 @@ export default class Header extends React.Component { // eslint-disable-line rea
                 </Link>
               </Typography> : null
               }
-              <Typography onClick={this.logOut} variant="h6" style={classes.title}>
-                <Link className="router-link" to='/login'>
+              <Typography  variant="h6" style={classes.title}>
+                <Link className="router-link" to='/login' onClick={this.logOut}>
                   Log out
                 </Link>
               </Typography>

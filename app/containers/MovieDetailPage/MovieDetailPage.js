@@ -29,7 +29,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
-import {validateObj,validateImage,validateInt,validateString} from 'utils/constants'
+import {validateObj,validateImage,validateInt,validateString,checkUserGeneral} from 'utils/constants'
 
 const useStyles = {
   card: {
@@ -143,7 +143,9 @@ export default class MovieDetailPage extends React.Component {
   }
 
   componentDidMount(){
-    if(!this.props.user.user.username){
+    this.props.fetchCategories();
+
+    if(!checkUserGeneral()){
       this.props.history.push('/login');
     }
     let pathname = this.props.history.location.pathname;
@@ -337,12 +339,14 @@ export default class MovieDetailPage extends React.Component {
               onChange={(e)=>this.onChangeMainValue(e,'addCategory')}
             >
               <MenuItem value={'All'}>All</MenuItem>
-              <MenuItem value={'Comedy'}>Comedy</MenuItem>
-              <MenuItem value={'Drama'}>Drama</MenuItem>
-              <MenuItem value={'Action'}>Action</MenuItem>
-              <MenuItem value={'Thriller'}>Thriller</MenuItem>
-              <MenuItem value={'Family'}>Family</MenuItem>
-              <MenuItem value={'Science-Fiction'}>Science-Fiction</MenuItem>
+              {
+                this.props.categories && this.props.categories.categories ? this.props.categories.categories.map(row=>{
+                  return (
+                    <MenuItem value={row.id}>{row.name}</MenuItem>
+                  )
+                }) : null
+              }
+
             </Select>
             
                 <Button onClick={this.onAddCategory} color='primary' size="large">Add Category</Button>

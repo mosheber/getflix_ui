@@ -68,8 +68,7 @@ function getAllMovies(){
     })
 }
 
-function searchMovies(category,searchString){
-  let categoryId = CATEGORY_MAPPING[category];
+function searchMovies(categoryId,searchString){
   return fetch('http://localhost:8080/Movies/ByCategory/'+categoryId, {
       method: 'GET',
       headers: {

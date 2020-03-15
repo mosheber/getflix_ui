@@ -8,12 +8,15 @@ import { fetchMovie,manageMovie,fetchComments,postComment } from './actions';
 import reducer from './reducer';
 // import saga from './saga';
 import MovieDetailPage from './MovieDetailPage';
-
+import categoriesReducer from '../CategoryPage/reducer';
+import {fetchCategories} from '../CategoryPage/actions'
 
 function mapStateToProps(state) {
     return {
+      categories: state.categories,
       currentMovie: state.currentMovie,
-      user:state.user
+      user:state.user,
+      
     };
   }
   
@@ -23,6 +26,7 @@ function mapStateToProps(state) {
       manageMovie: (movieObj) => dispatch(manageMovie(movieObj)),
       fetchComments: (id) => dispatch(fetchComments(id)),
       postComment: (id) => dispatch(postComment(id)),
+      fetchCategories: () => dispatch(fetchCategories())
     }
   }
 
@@ -37,7 +41,8 @@ function mapStateToProps(state) {
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
 const withReducer = injectReducer({ key: 'currentMovie', reducer });
+const withReducerCategory = injectReducer({ key: 'categories', reducer:categoriesReducer });
 //const withSaga = injectSaga({ key: 'home', saga });
 
-export default compose(withReducer,  withConnect)(MovieDetailPage); //withSaga,
+export default compose(withReducer,withReducerCategory,  withConnect)(MovieDetailPage); //withSaga,
 export { mapDispatchToProps };

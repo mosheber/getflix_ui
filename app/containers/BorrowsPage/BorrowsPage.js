@@ -25,6 +25,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
+import {checkUserGeneral} from 'utils/constants';
 
 const useStyles = {
   table: {
@@ -71,7 +72,7 @@ export default class BorrowsPage extends React.Component {
   }
 
   componentDidMount(){
-    if(!this.props.user.user.username){
+    if(!checkUserGeneral()){
       this.props.history.push('/login');
     }
     this.doSearch();
@@ -124,7 +125,7 @@ export default class BorrowsPage extends React.Component {
                 onChange={(e)=>this.onChangeValue(e,'userName')}
               /> : null
             }
-                          
+
               <InputBase
                 placeholder="Search Movies..."
                 defaultValue={this.state.search.movieName}

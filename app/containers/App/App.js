@@ -37,10 +37,10 @@ const App = () => (
       {/* <Route exact path="/" component={HomePage} /> */}
       {/* <Route path="/features" component={FeaturePage} /> */}
       <Route exact path="/login" component={LoginPage} />
+      <Route path="/register" component={RegisterPage} />
       <Route path="/browse" component={BrowsePage} />
       <Route path="/movie/:id" component={MovieDetailPage} />
       <Route path="/borrows" component={BorrowsPage} />
-      <Route path="/register" component={RegisterPage} />
       <Route path="/header" component={Header} />
       <Route path="/category" component={CategoryPage} />
       <Route path="" component={LoginPage} />
