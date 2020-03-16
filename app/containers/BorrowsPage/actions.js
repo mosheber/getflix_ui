@@ -89,7 +89,12 @@ export function borrowMovie(userId,movieId,startDate,endDate){
       .then(res => {
         return res.json();
       })
-    .then(json=>dispatch(borrowMovieSuccess(json)))
+    .then(json=>{
+      if('message' in json && json['message'].includes('Can not submit')){
+        throw 'Can not submit rent for this movie, there is no movie to rent in quantity';
+      }
+      return dispatch(borrowMovieSuccess(json))
+    })
     .catch(err=>dispatch(borrowMovieError(err)))
   }
 }

@@ -112,13 +112,14 @@ export default class BrowsePage extends React.Component {
 
     this.props.borrowMovie(this.props.user.user.id,movieId,startDate,endDate).then(res=>{
       if(res.type.includes('ERROR')){
-        alert(res)
+        alert(res.data)
       }else{
         alert('Borrowed '+movieName+'!')
-        this.setState({
-          modalOpen:false
-        })
       }
+      this.setState({
+        modalOpen:false
+      })
+      this.doSearch();
     })
   }
 
