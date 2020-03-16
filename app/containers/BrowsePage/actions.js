@@ -80,20 +80,32 @@ function searchMovies(categoryId,searchString){
 
 
 export function fetchMovies(category,searchString){
-  let get_movies = category == 'All' ? getAllMovies() : searchMovies(category,searchString);
+  //let get_movies = category == 'All' ? getAllMovies() : searchMovies(category,searchString);
+  let query = {
+    categoryId:category,
+    movieName:searchString
+  };
   return (dispatch)=> {
     dispatch(getMovies());
 
-    return get_movies
+    return fetch('http://localhost:8080/Movies/Query', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(query)
+    })
       .then(res => {
         return res.json();
       })
       .then(movies=>{
         let moviesWithImages = movies.filter(x=>x.image && x.image.includes('data'));
-        if(searchString==''){
-          return moviesWithImages;
-        }
-        return moviesWithImages.filter(x=>x.name.includes(searchString) || x.description.includes(searchString))
+        return moviesWithImages;
+        // if(searchString==''){
+        //   return moviesWithImages;
+        // }
+        // return moviesWithImages.filter(x=>x.name.includes(searchString) || x.description.includes(searchString))
       })
     .then(json=>dispatch(getMoviesSuccess(json)))
     .catch(err=>dispatch(getMoviesError(err)))

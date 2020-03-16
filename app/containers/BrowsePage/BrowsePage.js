@@ -63,7 +63,7 @@ export default class BrowsePage extends React.Component {
       modalOpen:false,
       search:{
         searchText : '',
-        searchCategory: 'All',
+        searchCategory: '-1',
         endDate:todayString,
       }
     }
@@ -193,7 +193,7 @@ export default class BrowsePage extends React.Component {
               value={this.state.search.searchCategory}
               onChange={(e)=>this.onChangeValue(e,'searchCategory')}
             >
-              <MenuItem value={'All'}>All</MenuItem>
+              <MenuItem value={'-1'}>All</MenuItem>
               {
                 this.props.categories && this.props.categories.categories ? this.props.categories.categories.map(row=>{
                   return (
