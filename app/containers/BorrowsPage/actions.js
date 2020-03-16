@@ -17,18 +17,31 @@ const borrows = [
 //     startDate: '2019-01-02',
 //     endDate: '2019-01-09',
 //     isReturned: true
-
+// {
+//   "user": "sh", //Not filter by ""
+//   "movie": "", //Not Filter by ""
+//   "fromDate": "2020-03-12",
+//   "toDate": "2020-03-18",
+//   "isReturn": "all" // "all" | "no" | " yes"
+//   } 
 export function fetchBorrows(userName,movieName,dateRange,isReturned){
-
+  let query = {
+    "user": userName, //Not filter by ""
+    "movie": movieName, //Not Filter by ""
+    "fromDate": dateRange['startDate'],
+    "toDate": dateRange['endDate'],
+    "isReturn": isReturned // "all" | "no" | " yes"
+  }; 
   return (dispatch)=> {
     dispatch(getBorrows());
 
-    return fetch('http://localhost:8080/rents', {
-      method: 'GET',
+    return fetch('http://localhost:8080/Rents/Query', {
+      method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
-      }
+      },
+      body: JSON.stringify(query)
     })
       .then(res => {
         return res.json();

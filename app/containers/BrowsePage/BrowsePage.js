@@ -115,6 +115,9 @@ export default class BrowsePage extends React.Component {
         alert(res)
       }else{
         alert('Borrowed '+movieName+'!')
+        this.setState({
+          modalOpen:false
+        })
       }
     })
   }

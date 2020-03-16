@@ -80,7 +80,7 @@ export default class BorrowsPage extends React.Component {
 
   doSearch(){
     let movieName = this.state.search.movieName;
-    let userName = this.state.search.userName;
+    let userName = this.props.user.user.isAdmin ? this.state.search.userName : this.props.user.user.username;
     let startDate = this.state.search.startDate;
     let endDate = this.state.search.endDate;
     let isReturned = this.state.search.isReturned;
@@ -174,7 +174,6 @@ export default class BorrowsPage extends React.Component {
                 <SearchIcon />
                 </IconButton>
               </Button>
-
             </Toolbar>
           </AppBar>
  
@@ -199,31 +198,31 @@ export default class BorrowsPage extends React.Component {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {this.props.borrows.borrows.map(row => (
+                {this.props.borrows.borrows ? this.props.borrows.borrows.map(row => (
                   <TableRow key={row.id}>
                     <TableCell component="th" scope="row">
                       {row.id}
                     </TableCell>
                     {
                       this.props.user.user.isAdmin ? 
-                      <TableCell align="right">{row.userId}</TableCell> :
+                      <TableCell align="right">{row.userName}</TableCell> :
                       null
                     }
-                    <TableCell align="right">{row.movieId}</TableCell>
+                    <TableCell align="right">{row.movieName}</TableCell>
                     <TableCell align="right">{row.startDate}</TableCell>
                     <TableCell align="right">{row.endDate}</TableCell>
                     <TableCell align="right">
                       { getOverdue(row.endDate) }
                     </TableCell>
-                    <TableCell align="right">{row.returned.toString() == 'false' ? 'No': 'Yes'}</TableCell>
+                    <TableCell align="right">{row.isReturned.toString() == 'false' ? 'No': 'Yes'}</TableCell>
                     <TableCell align="right">
                       {
-                        row.returned ? <div></div> : 
+                        row.isReturned ? <div></div> : 
                         <Button className="animated fadeIn" onClick = {() => this.returnBook(row)} variant="contained" color="primary">Return</Button>
                       }
                     </TableCell>
                   </TableRow>
-                ))}
+                )) : null}
               </TableBody>
             </Table>
           </TableContainer>

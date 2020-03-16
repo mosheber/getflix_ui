@@ -398,7 +398,7 @@ export default class MovieDetailPage extends React.Component {
                               <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
                             </ListItemAvatar>
                             <ListItemText
-                              primary={com.userId}
+                              primary={com.username}
                               secondary={
                                 <React.Fragment>
                                 <Typography
