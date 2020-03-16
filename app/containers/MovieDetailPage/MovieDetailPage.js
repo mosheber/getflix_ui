@@ -113,7 +113,7 @@ export default class MovieDetailPage extends React.Component {
 
     var isCreate = this.state.movie['id'].toString()=='0';
     
-    this.props.manageMovie(this.state.movie).then(res=>{
+    this.props.manageMovie(this.state.movie,this.state.categories.map(x=>x.id)).then(res=>{
       let messageAlert = ""
       if(res.type.includes('ERROR')){
         messageAlert = 'Error: '+ res.toString()
@@ -171,6 +171,14 @@ export default class MovieDetailPage extends React.Component {
             movie:this.props.currentMovie.movie,
             showComments:true
           })
+          this.props.fetchMovieCategories(this.props.currentMovie.movie.id)
+          .then(resMovieCategories=>{
+            let movieCategoryIds = this.props.currentMovie.categories.map(x=>x.categoryId);
+            let categoriesToShow = this.props.categories.categories.filter(x=> movieCategoryIds.includes(x.id) );
+            this.setState({
+              categories:categoriesToShow
+            })
+          });
           this.props.fetchComments(this.props.currentMovie.movie.id);
         }else{
           console.log('fetch failed');
@@ -195,15 +203,11 @@ export default class MovieDetailPage extends React.Component {
   }
 
   onRemoveCategory(cat){
-    let movie = this.state.movie
-    let categories = movie.categories;
-    let cat_removed = categories.splice(categories.indexOf(cat), 1);
-    movie.categories = categories;
+    let categories = this.state.categories;    
     this.setState({
-      movie:movie
+      categories:categories.filter(x=>x.id!=cat.id)
     })
   }
-
 
   onChangeValue(e,key){
     let value = e.target.value;
@@ -224,14 +228,15 @@ export default class MovieDetailPage extends React.Component {
   }
 
   onAddCategory(){
-    let category = this.state.mainValues.addCategory;
-    if(this.state.movie.categories.includes(category)){
+    let categoryId = this.state.mainValues.addCategory;
+    if(this.state.categories.map(x=>x.id).includes(categoryId)){
       alert('Category aleady in movie');
     }else{
-      let movie = this.state.movie
-      movie.categories.push(category);
+      let categoriesCurrent = this.state.categories;
+      let categoryObj = this.props.categories.categories.filter(x=>x.id==categoryId)[0];
+      categoriesCurrent.push(categoryObj);
       this.setState({
-        movie:movie
+        categories:categoriesCurrent
       })
     }
   }
@@ -338,7 +343,6 @@ export default class MovieDetailPage extends React.Component {
               value={this.state.mainValues.addCategory}
               onChange={(e)=>this.onChangeMainValue(e,'addCategory')}
             >
-              <MenuItem value={'All'}>All</MenuItem>
               {
                 this.props.categories && this.props.categories.categories ? this.props.categories.categories.map(row=>{
                   return (
@@ -352,9 +356,9 @@ export default class MovieDetailPage extends React.Component {
                 <Button onClick={this.onAddCategory} color='primary' size="large">Add Category</Button>
                 <div style={{padding:10}}></div>
               {
-                this.state.movie.categories ? this.state.movie.categories.map(cat => 
+                this.state.categories ? this.state.categories.map(cat => 
                     (
-                      <Chip label={cat} onDelete={() => this.onRemoveCategory(cat)} color="primary" />
+                      <Chip label={cat['name']} onDelete={() => this.onRemoveCategory(cat)} color="primary" />
                     )
                   ) : null
               }

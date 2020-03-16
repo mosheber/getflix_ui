@@ -68,6 +68,26 @@ export default function MovieReducer(state=initialState,action){
         errorComments:true
       }
     },
+    'getMovieCategories':()=>{
+      return {
+        ...state,
+        isFetchingMovieCategories:true,
+      }
+    },
+    'getMovieCategories_SUCCESS':()=>{
+      return {
+        ...state,
+        isFetchingMovieCategories:false,
+        categories:action.data
+      }
+    },
+    'getMovieCategories_ERROR':()=>{
+      return {
+        ...state,
+        isFetchingMovieCategories:false,
+        errorFetchingMovieCategories:true
+      }
+    },
     'POST_Comments':()=>{
       return {
         ...state,

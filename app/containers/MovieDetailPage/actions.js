@@ -107,7 +107,7 @@ export function fetchComments(movieId){
   return (dispatch)=> {
     dispatch(getComments());
 
-    fetch('http://localhost:8080//Comments/ByMovieId/'+movieId, {
+    return fetch('http://localhost:8080/Comments/ByMovieId/'+movieId, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -143,6 +143,49 @@ function getCommentsError(data){
     type:'FETCHING_Comments_ERROR'
   }
 }
+
+
+export function fetchMovieCategories(movieId){
+  return (dispatch)=> {
+    dispatch(getMovieCategories());
+
+    return fetch('http://localhost:8080/movieCategories/Movie/'+movieId, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => {
+        let a=3;
+        return res.json();
+      })
+    .then(json=>dispatch(getMovieCategoriesSuccess(json)))
+    .catch(err=>dispatch(getMovieCategoriesError(err)))
+  }
+}
+
+
+function getMovieCategories(){
+  return {
+    type:'getMovieCategories'
+  }
+}
+
+
+function getMovieCategoriesSuccess(data){
+  return {
+    type:'getMovieCategories_SUCCESS',
+    data
+  }
+}
+
+function getMovieCategoriesError(data){
+  return {
+    type:'getMovieCategories_ERROR'
+  }
+}
+
 
 
 // private int id;
@@ -249,7 +292,7 @@ function editMovie(movie){
   })
 }
 
-export function manageMovie(movieObj){
+export function manageMovie(movieObj,categories){
   return (dispatch)=> {
     dispatch(manageMovieBegin());
 
@@ -268,10 +311,27 @@ export function manageMovie(movieObj){
     //   })
     return request_to_do
     .then(res=>{
+      let a=2;
+      return res.json();
+    })
+    .then(movie=>{      
+      return fetch('http://localhost:8080/movieCategories/Manage', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({movieId:movie.id,categoryIds:categories})
+      })
+    })
+    .then(res=>{
       var a =3;
       return res.json()
     })
-    .then(json=>dispatch(manageMovieSuccess(json)))
+    .then(
+      json=>{
+        return dispatch(manageMovieSuccess(json))
+      })
     .catch(err=>dispatch(manageMovieError(err)))
   }
 }
