@@ -26,6 +26,7 @@ import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import {checkUserGeneral} from 'utils/constants';
+import Divider from '@material-ui/core/Divider';
 
 const useStyles = {
   table: {
@@ -183,20 +184,23 @@ export default class BorrowsPage extends React.Component {
             <Table className={classes.table} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Id</TableCell>
+                  <TableCell style={{'fontWeight':'bold'}} >Id</TableCell>
                   {
                     this.props.user.user.isAdmin ? 
-                    <TableCell align="right">User Name</TableCell> : 
+                    <TableCell align="right" style={{'fontWeight':'bold'}}>User Name</TableCell> : 
                     null
                   }
-                  <TableCell align="right">Movie Name</TableCell>
-                  <TableCell align="right">Start Date</TableCell>
-                  <TableCell align="right">End Date</TableCell>
-                  <TableCell align="right">Days Overdue</TableCell>
-                  <TableCell align="right">Is Returned?</TableCell>
-                  <TableCell align="right">Actions</TableCell>
+                  <TableCell align="right" style={{'fontWeight':'bold'}} >Movie Name</TableCell>
+                  <TableCell align="right" style={{'fontWeight':'bold'}} >Start Date</TableCell>
+                  <TableCell align="right" style={{'fontWeight':'bold'}} >End Date</TableCell>
+                  <TableCell align="right" style={{'fontWeight':'bold'}} >Days Overdue</TableCell>
+                  <TableCell align="right" style={{'fontWeight':'bold'}} >Is Returned?</TableCell>
+                  <TableCell align="right" style={{'fontWeight':'bold'}} >Actions</TableCell>
                 </TableRow>
               </TableHead>
+              <Divider variant="inset" component="div" />
+              <Divider variant="inset" component="div" />
+              <Divider variant="inset" component="div" />
               <TableBody>
                 {this.props.borrows.borrows ? this.props.borrows.borrows.map(row => (
                   <TableRow key={row.id}>
