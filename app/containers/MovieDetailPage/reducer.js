@@ -88,6 +88,12 @@ export default function MovieReducer(state=initialState,action){
         errorFetchingMovieCategories:true
       }
     },
+    'CLEAN_MOVIE_CATEGORIES':()=>{
+      return {
+        ...state,
+        categories:[]
+      }
+    },
     'POST_Comments':()=>{
       return {
         ...state,

@@ -87,7 +87,8 @@ export default class MovieDetailPage extends React.Component {
         addCategory:'All',
         comment:'',
         rating:3
-      }
+      },
+      categories:[]
       //editable: false
     };
     this.validateFields = [ 
@@ -196,13 +197,17 @@ export default class MovieDetailPage extends React.Component {
       console.log('create movie');
       this.setState({
         movie:this.movieDefault,
-        showComments:false
+        showComments:false,
+        categories:[]
       })
       this.props.currentMovie.comments = []
     }
   }
 
   onRemoveCategory(cat){
+    if(!this.props.user.user.isAdmin){
+      return;
+    }
     let categories = this.state.categories;    
     this.setState({
       categories:categories.filter(x=>x.id!=cat.id)
@@ -273,14 +278,17 @@ export default class MovieDetailPage extends React.Component {
               <img src={this.state.movie.img} style={{width:300,height:500}} />
               : <img src={this.state.movie.img} style={{width:300,height:500}} />
             }
-
+          {
+            this.props.user.user.isAdmin ? 
             <ImageUploader
                 withIcon={true}
                 buttonText='Choose images'
                 onChange={this.onDrop}
                 imgExtension={['.jpg', '.gif', '.png', '.gif']}
                 //maxFileSize={5242880}
-              />
+              /> : null
+          }
+            
           </div>
           <div style={{display:'flex',flexDirection:'column'}}>
           <Card style={{width:500}}>
@@ -290,6 +298,7 @@ export default class MovieDetailPage extends React.Component {
                className="animated fadeIn"
                 label="Movie name"
                 value={this.state.movie.name}
+                disabled={!this.props.user.user.isAdmin}
                 onChange={(e)=>this.onChangeValue(e,'name')}
               />
 
@@ -297,6 +306,7 @@ export default class MovieDetailPage extends React.Component {
                className="animated fadeIn"
                 label="Movie Length in Minutes"
                 value={this.state.movie.length}
+                disabled={!this.props.user.user.isAdmin}
                 onChange={(e)=>this.onChangeValue(e,'length')}
               />
 
@@ -305,6 +315,7 @@ export default class MovieDetailPage extends React.Component {
                className="animated fadeIn"
                 label="Movie quantity in store"
                 value={this.state.movie.quantity}
+                disabled={!this.props.user.user.isAdmin}
                 onChange={(e)=>this.onChangeValue(e,'quantity')}
               />
 
@@ -313,6 +324,7 @@ export default class MovieDetailPage extends React.Component {
                className="animated fadeIn"
                 label="Director"
                 value={this.state.movie.director}
+                disabled={!this.props.user.user.isAdmin}
                 helperText="The director of the movie"
                 onChange={(e)=>this.onChangeValue(e,'director')}
               />
@@ -322,6 +334,7 @@ export default class MovieDetailPage extends React.Component {
                className="animated fadeIn"
                 label="Publish Date"
                 type="date"
+                disabled={!this.props.user.user.isAdmin}
                 value={this.state.movie.publishDate}
                 onChange={(e)=>this.onChangeValue(e,'publishDate')}
                 InputLabelProps={{
@@ -333,6 +346,7 @@ export default class MovieDetailPage extends React.Component {
               <TextField
                className="animated fadeIn"
                 label="Description"
+                disabled={!this.props.user.user.isAdmin}
                 value={this.state.movie.description}
                 onChange={(e)=>this.onChangeValue(e,'description')}
                 multiline
@@ -340,6 +354,7 @@ export default class MovieDetailPage extends React.Component {
               />
 
             <Select
+              disabled={!this.props.user.user.isAdmin}
               value={this.state.mainValues.addCategory}
               onChange={(e)=>this.onChangeMainValue(e,'addCategory')}
             >
@@ -353,7 +368,12 @@ export default class MovieDetailPage extends React.Component {
 
             </Select>
             
-                <Button onClick={this.onAddCategory} color='primary' size="large">Add Category</Button>
+            {
+            this.props.user.user.isAdmin ? 
+            <Button onClick={this.onAddCategory} color='primary' size="large">Add Category</Button> :
+            null
+            }
+                
                 <div style={{padding:10}}></div>
               {
                 this.state.categories ? this.state.categories.map(cat => 
@@ -364,9 +384,13 @@ export default class MovieDetailPage extends React.Component {
               }
               
             </CardContent>
-            <CardActions  className="animated bounce">
+            {
+              this.props.user.user.isAdmin ? 
+              <CardActions  className="animated bounce">
               <Button onClick={this.save} color='primary' size="large">Save</Button>
-            </CardActions>
+            </CardActions> : null
+            }
+            
           </Card>
           </div>
           {

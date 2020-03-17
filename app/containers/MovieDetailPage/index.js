@@ -27,7 +27,7 @@ function mapStateToProps(state) {
       fetchComments: (id) => dispatch(fetchComments(id)),
       postComment: (id) => dispatch(postComment(id)),
       fetchCategories: () => dispatch(fetchCategories()),
-      fetchMovieCategories: (movieId) => dispatch(fetchMovieCategories(movieId))
+      fetchMovieCategories: (movieId) => dispatch(fetchMovieCategories(movieId)),
     }
   }
 

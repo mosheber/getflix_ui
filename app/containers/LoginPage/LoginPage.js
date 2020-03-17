@@ -43,7 +43,7 @@ export default class LoginPage extends React.Component {
     .then(res => {
       if(res.data){
         if(res.data instanceof Error){
-          alert(res.data)
+          alert('Username or password invalid. Please try again.')
         }else{
           this.props.history.push('/browse')
         }
@@ -102,9 +102,9 @@ export default class LoginPage extends React.Component {
               {
                 this.props.user.errorMessage=='' ? null : 
                 <div>    
-                <Typography color="error" gutterBottom>
+                {/* <Typography color="error" gutterBottom>
                     {this.props.user.errorMessage}
-                </Typography>
+                </Typography> */}
               </div>
               }
               

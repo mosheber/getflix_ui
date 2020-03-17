@@ -188,6 +188,20 @@ function getMovieCategoriesError(data){
 
 
 
+export function cleanCategories(){
+  
+  return (dispatch)=> {
+    dispatch({
+      type:'CLEAN_MOVIE_CATEGORIES'
+    });
+
+    return new Promise((resolve,reject)=>{
+      resolve({});
+    })
+  }
+}
+
+
 // private int id;
 // private int userId;
 // private int movieId;

@@ -3,7 +3,7 @@
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import injectReducer from 'utils/injectReducer';
-import { fetchMovie } from '../../containers/MovieDetailPage/actions';
+import { fetchMovie,cleanCategories } from '../../containers/MovieDetailPage/actions';
 import { fetchUser,logOutUser,setLocalUser } from '../../containers/App/actions';
 import reducer from '../../containers/App/userReducer';
 // import saga from './saga';
@@ -17,6 +17,7 @@ function mapStateToProps(state) {
   
   function mapDispatchToProps(dispatch) {
     return {
+      cleanCategories: () => dispatch(cleanCategories()),
       fetchMovie: (id) => dispatch(fetchMovie(id)),
       fetchUser: (username,password) => dispatch(fetchUser(username,password)),
       logOutUser: () => dispatch(logOutUser()),

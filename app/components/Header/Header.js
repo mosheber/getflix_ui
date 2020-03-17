@@ -34,6 +34,7 @@ export default class Header extends React.Component { // eslint-disable-line rea
 
   cleanMovie(){
     this.props.fetchMovie('0');
+    this.props.cleanCategories();
   }
 
   logOut(){
@@ -59,11 +60,14 @@ export default class Header extends React.Component { // eslint-disable-line rea
                   Browse Catalog            
                 </Link>
               </Typography>
-              <Typography  variant="h6" style={classes.title}>
-                <Link className="router-link" to="/movie/0" onClick={this.cleanMovie}>
-                  Add a Movie
-                </Link>
-              </Typography>
+              {
+                this.props.user.user.isAdmin ? 
+                <Typography  variant="h6" style={classes.title}>
+                  <Link className="router-link" to="/movie/0" onClick={this.cleanMovie}>
+                    Add a Movie
+                  </Link>
+                </Typography> : null
+              }
               <Typography variant="h6" style={classes.title}>
                 <Link className="router-link" to="/borrows">
                   My Borrows
