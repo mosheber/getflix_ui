@@ -71,6 +71,7 @@ export default class BrowsePage extends React.Component {
     this.borrowMovie = this.borrowMovie.bind(this);
     this.doSearch = this.doSearch.bind(this);
     this.handleCloseModel=this.handleCloseModel.bind(this);
+    this.borrowThresHoldInMilliseconds = 31489467682;
   }
 
   componentDidMount(){
@@ -103,12 +104,25 @@ export default class BrowsePage extends React.Component {
   }
 
   borrowMovie(){
+    
+    let today = new Date();
+    let endDate = this.state.search.endDate;
+    let endDateObj  = new Date(endDate);
+
+    if((endDateObj-today) < 0){
+      alert('The end date is before the start date. Please choose valid end date.');
+      return;
+    }
+
+    if((endDateObj-today) > this.borrowThresHoldInMilliseconds){
+      alert('The end date is more than a year into the future. Please choose valid end date.');
+      return;
+    }
+
+    let startDate = getDateString(today);
     let movieId = this.state.movieIdToBorrow;
     let movieName = this.state.movieNameToBorrow;
 
-    let today = new Date();
-    let startDate = getDateString(today);
-    let endDate = this.state.search.endDate;
 
     this.props.borrowMovie(this.props.user.user.id,movieId,startDate,endDate).then(res=>{
       if(res.type.includes('ERROR')){
@@ -118,7 +132,7 @@ export default class BrowsePage extends React.Component {
       }
       this.setState({
         modalOpen:false
-      })
+      });
       this.doSearch();
     })
   }

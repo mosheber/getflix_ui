@@ -31,6 +31,11 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import {validateObj,validateImage,validateInt,validateString,checkUserGeneral} from 'utils/constants'
 
+
+const average = arr => arr.reduce( ( p, c ) => p + c, 0 ) / arr.length;
+
+
+
 const useStyles = {
   card: {
     display: 'flex',
@@ -415,6 +420,26 @@ export default class MovieDetailPage extends React.Component {
                     />
                   <Button onClick={this.onAddComment} color='primary'>Post</Button>
                 </ListItem>
+                <Divider variant="inset" component="div" />
+                <Divider variant="inset" component="div" />
+                <Divider variant="inset" component="div" />
+                <Divider variant="inset" component="div" />
+                <ListItem>
+                <Typography>
+                  Average Rating: 
+                  <Rating
+                  size={'large'}
+                      name="simple-controlled"
+                      value={
+                        this.props.currentMovie.comments ? 
+                        average(this.props.currentMovie.comments.map(x=>x.grade)) : 0
+                      }
+                      readOnly
+                    />
+                </Typography>
+                </ListItem>
+                <Divider variant="inset" component="div" />
+                <Divider variant="inset" component="div" />
                 <Divider variant="inset" component="div" />
                 <Divider variant="inset" component="div" />
                 {
