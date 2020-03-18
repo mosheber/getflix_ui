@@ -87,7 +87,7 @@ export function validateImage(key){
 
 export function validatePassword(key){
   return { 'name':key, 'check': (x,obj)=>/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(x),
-  'validMessage':'Password needs to contain at least one lowercase letter, one uppercase, and one number.'};
+  'validMessage':'Password needs to contain at least one lowercase letter, one uppercase, and one number, nd length of at least 8.'};
 }
 export function validatePasswordRepeat(key){
   return { 'name':key, 'check': (x,obj)=>x==obj['password'],'validMessage':'Passwords must match'};
