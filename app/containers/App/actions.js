@@ -140,6 +140,13 @@ export function createUser(user){
       .then(res => {
         return res.json();
       })
+      .then(userRes=>{
+        let a=2;
+        if('message' in userRes && userRes['message'].includes('User is already')){
+          throw 'User is already register in Getflix, try to login';
+        }
+        return userRes;
+      })
     .then(json=>dispatch(createUserSuccess(json)))
     .catch(err=>dispatch(createUserError(err)))
   }

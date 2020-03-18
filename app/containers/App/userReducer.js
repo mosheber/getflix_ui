@@ -69,7 +69,7 @@ export default function userReducer(state=initialState,action){
         return {
           ...state,
           isCreating:false,
-          registerErrorMessage:action.data.message
+          registerErrorMessage:action.data
         }
       },
       'LOGOUT_USER':()=>{

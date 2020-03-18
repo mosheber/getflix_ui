@@ -68,18 +68,14 @@ export default class RegisterPage extends React.Component {
   constructor(props) {
     super(props);
     // Don't call this.setState() here!
-    
+    this.defaultUser = {
+      username:"none",
+      password:"none",
+      passwordRepeated:"none",
+      isAdmin:false,
+    };
     this.state = { 
-      user:{
-        // img:'none',
-        username:"none",
-        // firstname:'none',
-        // lastname:'none',
-        password:"none",
-        passwordRepeated:"none",
-        // birthDate:'2000-01-01',
-        isAdmin:false,
-      }
+      user:this.defaultUser
     };
     this.validateFields = [
       validateString('username'),
@@ -109,6 +105,9 @@ export default class RegisterPage extends React.Component {
   }
 
   componentDidMount(){
+    this.setState({
+      user:this.defaultUser
+    })
   }
 
   onRemoveCategory(cat){
@@ -125,8 +124,16 @@ export default class RegisterPage extends React.Component {
     this.props.createUser(this.state.user)
     .then(res => {
       if(res.data){
-        if(res.data instanceof Error){
-          alert(res.data)
+        if(res.type.includes('ERROR')){
+          this.setState({
+            user:{
+              username:"none",
+              password:"none",
+              passwordRepeated:"none",
+              isAdmin:false,
+            }
+          })
+          alert(this.props.user.registerErrorMessage)
         }else{
           this.props.history.push('/browse')
         }
