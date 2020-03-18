@@ -202,7 +202,7 @@ export default class BorrowsPage extends React.Component {
               <Divider variant="inset" component="div" />
               <Divider variant="inset" component="div" />
               <TableBody>
-                {this.props.borrows.borrows ? this.props.borrows.borrows.map(row => (
+                {this.props.borrows.borrows && Array.isArray(this.props.borrows.borrows) ? this.props.borrows.borrows.map(row => (
                   <TableRow key={row.id}>
                     <TableCell component="th" scope="row">
                       {row.id}
