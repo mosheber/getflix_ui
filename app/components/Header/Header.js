@@ -12,10 +12,10 @@ import './style.scss';
 
 const classes = {
   root: {
-    flexGrow: 1,
+    //flexGrow: 1,
   },
   title: {
-    flexGrow: 1,
+    //flexGrow: 1,
   },
 };
 
@@ -48,18 +48,21 @@ export default class Header extends React.Component { // eslint-disable-line rea
               {
                 this.props.user.user.username ? 
                 <Toolbar>
-              <Link className="router-link" to="/browse">
-                  <img src={Banner} alt="getflix" width="40%"/>
-              </Link>
+              <img src={Banner} alt="getflix" width="20%"/>
+              {/* <Link className="router-link" to="/browse">
+      
+              </Link> */}
+              <div style={{padding:10}}></div>
                   <Typography variant="h6" style={classes.title}>
                 Hello {this.props.user.user.username}!
               </Typography> 
-
+              <div style={{padding:10}}></div>
               <Typography variant="h6" style={classes.title}>
                 <Link className="router-link" to="/browse">
                   Browse Catalog            
                 </Link>
               </Typography>
+              <div style={{padding:10}}></div>
               {
                 this.props.user.user.isAdmin ? 
                 <Typography  variant="h6" style={classes.title}>
@@ -68,11 +71,13 @@ export default class Header extends React.Component { // eslint-disable-line rea
                   </Link>
                 </Typography> : null
               }
+              <div style={{padding:10}}></div>
               <Typography variant="h6" style={classes.title}>
                 <Link className="router-link" to="/borrows">
                   My Borrows
                 </Link>
               </Typography>
+              <div style={{padding:10}}></div>
               {
                 this.props.user.user.isAdmin ? 
                 <Typography variant="h6" style={classes.title}>
@@ -81,6 +86,16 @@ export default class Header extends React.Component { // eslint-disable-line rea
                 </Link>
               </Typography> : null
               }
+              <div style={{padding:10}}></div>
+              {
+                this.props.user.user.isAdmin ? 
+                <Typography variant="h6" style={classes.title}>
+                <Link className="router-link" to={{pathname:'/register',state:{allowAdmin:true}}}>
+                  Add Admin
+                </Link>
+              </Typography> : null
+              }
+              <div style={{padding:10}}></div>
               <Typography  variant="h6" style={classes.title}>
                 <Link className="router-link" to='/login' onClick={this.logOut}>
                   Log out

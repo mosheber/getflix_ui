@@ -66,7 +66,12 @@ export default class LoginPage extends React.Component {
   }
 
   register(){
-    this.props.history.push('/register');
+    this.props.history.push({
+      pathname:'/register',
+      state:{
+        allowAdmin:false
+      }
+    });
   }
 
   render() {

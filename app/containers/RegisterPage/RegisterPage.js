@@ -78,7 +78,7 @@ export default class RegisterPage extends React.Component {
         password:"none",
         passwordRepeated:"none",
         // birthDate:'2000-01-01',
-        isAdmin:false
+        isAdmin:false,
       }
     };
     this.validateFields = [
@@ -109,7 +109,6 @@ export default class RegisterPage extends React.Component {
   }
 
   componentDidMount(){
-    // this.props.fetchMovie(1);
   }
 
   onRemoveCategory(cat){
@@ -236,6 +235,7 @@ export default class RegisterPage extends React.Component {
                   Is Admin?
                 </Typography>
                 <Switch
+                disabled={!this.props.location.state.allowAdmin}
                 checked={this.state.user.isAdmin}
                 onChange={(e)=>this.onChangeValue(e,'isAdmin')}
                 value="isAdmin"
